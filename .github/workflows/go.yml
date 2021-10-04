@@ -1,0 +1,39 @@
+name: test
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        go-version: [1.17]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Go ${{ matrix.go-version }} on ${{ matrix.os }}
+      uses: actions/setup-go@v2
+      with:
+        go-version: ${{ matrix.go-version }}
+
+    - name: Test and Coverage
+      run: |
+        go test -v -coverprofile=coverage.txt.tmp -covermode=atomic ./...
+        cat coverage.txt.tmp | grep -v "testutils.go" > coverage.txt
+
+    - name: Upload coverage report
+      uses: codecov/codecov-action@v2
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage.txt
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: true
+        verbose: true

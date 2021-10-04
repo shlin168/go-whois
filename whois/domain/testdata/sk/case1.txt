@@ -1,0 +1,69 @@
+Domain:                       amazon.sk
+Registrant:                   COMLDE-040672
+Admin Contact:                COMLDE-040674
+Tech Contact:                 COMLDE-000284
+Registrar:                    COML-0001
+Created:                      2003-11-12
+Updated:                      2020-11-07
+Valid Until:                  2021-11-12
+Nameserver:                   nsgbr.comlaude.co.uk
+Nameserver:                   nssui.comlaude.ch
+Nameserver:                   nsusa.comlaude.net
+EPP Status:                   clientTransferProhibited, clientUpdateProhibited, clientDeleteProhibited
+
+Registrar:                    COML-0001
+Name:                         Lorna J. Gradden
+Organization:                 Nom-IQ Limited dba Com Laude
+Organization ID:              5047655
+Phone:                        +44.2074218250
+Email:                        admin@comlaude.com
+Street:                       28-30 Little Russell Street
+City:                         London
+Postal Code:                  WC1A 2HN
+State/Province:               London
+Country Code:                 UK
+Created:                      2017-09-04
+Updated:                      2021-09-01
+
+Contact:                      COMLDE-040672
+Name:                         Amazon Europe Core S.a.r.l.
+Organization:                 Amazon Europe Core S.a.r.l.
+Organization ID:              B180022
+Phone:                        +352.265240000
+Email:                        hostmaster@amazon.com
+Street:                       38 avenue John F. Kennedy
+City:                         Luxembourg
+Postal Code:                  L-1855
+Country Code:                 LU
+Registrar:                    COML-0001
+Created:                      2018-02-22
+Updated:                      2018-12-18
+
+Contact:                      COMLDE-040674
+Name:                         Amazon Europe Core S.a.r.l.
+Organization:                 Amazon Europe Core S.a.r.l.
+Organization ID:              B180022
+Phone:                        +352.265240000
+Email:                        hostmaster@amazon.com
+Street:                       38 avenue John F. Kennedy
+City:                         Luxembourg
+Postal Code:                  L-1855
+Country Code:                 LU
+Registrar:                    COML-0001
+Created:                      2018-09-12
+Updated:                      2019-01-07
+
+Contact:                      COMLDE-000284
+Name:                         Technical Manager
+Organization:                 Com Laude
+Organization ID:              05041655
+Phone:                        +44.2074218250
+Email:                        hostmaster@comlaude.com
+Street:                       28-30 Little Russell Street
+City:                         London
+Postal Code:                  WC1A 2HN
+State/Province:               London
+Country Code:                 UK
+Registrar:                    COML-0001
+Created:                      2018-01-12
+Updated:                      2018-01-12
