@@ -1,0 +1,39 @@
+Domain:
+	sunderland.ac.uk
+
+Registered For:
+	University of Sunderland
+
+Domain Owner:
+	University of Sunderland
+
+Registered By:
+	Jisc Services Limited
+
+Servers:
+	ns11.ja.net
+	ns10.ja.net
+	ns12.ja.net
+
+Registrant Contact:
+	Kevin Hayton
+
+Registrant Address:
+	Unit 1A
+	Technology Park
+	Chester Road
+	SUNDERLAND
+	SR2 7PT
+	United Kingdom
+	+44 191 515 2992 (Phone)
+	+44 191 515 2988 (FAX)
+	helpdesk@sunderland.ac.uk
+
+Renewal date:
+	Tuesday 1st Feb 2022
+
+Entry updated:
+	Wednesday 13th October 2021
+
+Entry created:
+	Monday 10th November 2003

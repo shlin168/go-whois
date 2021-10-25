@@ -1,0 +1,33 @@
+# Copyright (c) 1997- The Swedish Internet Foundation.
+# All rights reserved.
+# The information obtained through searches, or otherwise, is protected
+# by the Swedish Copyright Act (1960:729) and international conventions.
+# It is also subject to database protection according to the Swedish
+# Copyright Act.
+# Any use of this material to target advertising or
+# similar activities is forbidden and will be prosecuted.
+# If any of the information below is transferred to a third
+# party, it must be done in its entirety. This server must
+# not be used as a backend for a search engine.
+# Result of search for registered domain names under
+# the .se top level domain.
+# This whois printout is printed with UTF-8 encoding.
+#
+state: active
+domain: lendo.se
+holder: CP0000-35526
+admin-c: -
+tech-c: -
+billing-c: -
+created: 2006-10-27
+modified: 2021-06-06
+expires: 2022-06-13
+transferred: 2017-09-11
+nserver: ns-cloud-a1.googledomains.com
+nserver: ns-cloud-a2.googledomains.com
+nserver: ns-cloud-a3.googledomains.com
+nserver: ns-cloud-a4.googledomains.com
+dnssec: unsigned delegation
+registry-lock: unlocked
+status: ok
+registrar: Ports Group AB

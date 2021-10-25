@@ -11,7 +11,18 @@ import (
 	"github.com/shlin168/go-whois/whois/utils"
 )
 
-func TestDefaultParser(t *testing.T) {
+func checkParserResult(t *testing.T, ps, rawtextPath, expParser string, exp *ParsedWhois) {
+	parser := NewTLDDomainParser(utils.GetTLD(ps))
+	assert.Equal(t, expParser, parser.GetName())
+
+	b, err := testdata.ReadRawtext(rawtextPath)
+	require.Nil(t, err)
+	parsedWhois, err := parser.GetParsedWhois(string(b))
+	assert.Nil(t, err)
+	assert.Empty(t, cmp.Diff(exp, parsedWhois))
+}
+
+func TestDefaultParserIO(t *testing.T) {
 	c := &Contact{
 		Organization: "GitHub, Inc.",
 		State:        "CA",
@@ -45,15 +56,28 @@ func TestDefaultParser(t *testing.T) {
 			Tech:       c,
 		},
 	}
+	checkParserResult(t, "github.io", "default/case_io.txt", "default", exp)
+}
 
-	parser := NewTLDDomainParser(utils.GetTLD("github.io"))
-	assert.Equal(t, "default", parser.GetName())
-
-	b, err := testdata.ReadRawtext("default/case1.txt")
-	require.Nil(t, err)
-	parsedWhois, err := parser.GetParsedWhois(string(b))
-	assert.Nil(t, err)
-	assert.Empty(t, cmp.Diff(exp, parsedWhois))
+func TestDefaultParserSE(t *testing.T) {
+	exp := &ParsedWhois{
+		DomainName: "lendo.se",
+		Registrar: &Registrar{
+			Name: "Ports Group AB",
+		},
+		NameServers: []string{
+			"ns-cloud-a1.googledomains.com", "ns-cloud-a2.googledomains.com",
+			"ns-cloud-a3.googledomains.com", "ns-cloud-a4.googledomains.com",
+		},
+		CreatedDate:    "2006-10-27T00:00:00+00:00",
+		CreatedDateRaw: "2006-10-27",
+		UpdatedDate:    "2021-06-06T00:00:00+00:00",
+		UpdatedDateRaw: "2021-06-06",
+		ExpiredDate:    "2022-06-13T00:00:00+00:00",
+		ExpiredDateRaw: "2022-06-13",
+		Statuses:       []string{"ok"},
+	}
+	checkParserResult(t, "lando.se", "default/case_se.txt", "default", exp)
 }
 
 func TestFoundByKey(t *testing.T) {

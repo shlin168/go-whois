@@ -2,12 +2,6 @@ package domain
 
 import (
 	"testing"
-
-	"github.com/google/go-cmp/cmp"
-	"github.com/shlin168/go-whois/whois/domain/testdata"
-	"github.com/shlin168/go-whois/whois/utils"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 func TestSKParser(t *testing.T) {
@@ -52,12 +46,5 @@ func TestSKParser(t *testing.T) {
 		},
 	}
 
-	parser := NewTLDDomainParser(utils.GetTLD("amazon.sk"))
-	assert.Equal(t, "sk", parser.GetName())
-
-	b, err := testdata.ReadRawtext("sk/case1.txt")
-	require.Nil(t, err)
-	parsedWhois, err := parser.GetParsedWhois(string(b))
-	assert.Nil(t, err)
-	assert.Empty(t, cmp.Diff(exp, parsedWhois))
+	checkParserResult(t, "amazon.sk", "sk/case1.txt", "sk", exp)
 }

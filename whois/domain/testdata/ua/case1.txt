@@ -1,0 +1,90 @@
+% Request from 1.1.1.1
+% This is the Ukrainian Whois query server #W.
+% The Whois is subject to Terms of use
+% See https://hostmaster.ua/services/
+%
+% IN THE PROCESS OF DELEGATION OF A DOMAIN NAME,
+% THE REGISTRANT IS AN ENTITY WHO USES AND MANAGES A CERTAIN DOMAIN NAME,
+% AND THE REGISTRAR IS A BUSINESS ENTITY THAT PROVIDES THE REGISTRANT
+% WITH THE SERVICES NECESSARY FOR THE TECHNICAL MAINTENANCE OF THE REGISTRATION AND OPERATION OF THE DOMAIN NAME.
+% FOR INFORMATION ABOUT THE REGISTRANT OF THE DOMAIN NAME, YOU SHOULD CONTACT THE REGISTRAR.
+
+domain:           dobrodoc.ua
+dom-public:       NO
+license:          236213
+mnt-by:           ua.nic
+nserver:          alex.ns.cloudflare.com
+nserver:          pola.ns.cloudflare.com
+status:           ok
+created:          2018-02-01 15:53:47+02
+modified:         2021-09-09 22:15:24+03
+expires:          2022-02-01 15:53:47+02
+source:           UAEPP
+
+% Registrar:
+% ==========
+registrar:        ua.nic
+organization:     NIC.UA LLC
+organization-loc: ТОВ "НІК.ЮЕЙ"
+url:              http://nic.ua
+city:             Dnipro
+country:          UA
+abuse-email:      abuse@nic.ua
+abuse-phone:      +380445933222
+abuse-postal:     Ukraine 49000 Dnipro PO/BOX 80
+abuse-postal-loc: Україна 49000 Дніпро а/с 80
+source:           UAEPP
+
+% Registrant:
+% ===========
+person:           n/a
+person-loc:       not published
+organization-loc: not published
+e-mail:           not published
+address:          n/a
+address-loc:      not published
+phone:            not published
+fax:              not published
+mnt-by:           ua.nic
+status:           ok
+status:           linked
+created:          2018-01-31 16:00:50+02
+source:           UAEPP
+
+
+% Administrative Contacts:
+% =======================
+person:           n/a
+person-loc:       not published
+organization-loc: not published
+e-mail:           not published
+address:          n/a
+address-loc:      not published
+phone:            not published
+fax:              not published
+mnt-by:           ua.nic
+status:           ok
+status:           linked
+created:          2018-01-31 16:00:50+02
+source:           UAEPP
+
+
+% Technical Contacts:
+% ===================
+person:           n/a
+person-loc:       not published
+organization-loc: not published
+e-mail:           not published
+address:          n/a
+address-loc:      not published
+phone:            not published
+fax:              not published
+mnt-by:           ua.nic
+status:           ok
+status:           linked
+created:          2018-01-31 16:00:50+02
+source:           UAEPP
+
+
+
+% Query time:     4 msec

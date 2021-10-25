@@ -1,7 +1,6 @@
 package domain
 
 import (
-	"encoding/json"
 	"sort"
 	"strings"
 )
@@ -14,7 +13,7 @@ var SKMap map[string]string = map[string]string{
 	"Tech Contact":  "c/tech/id",
 }
 
-func mapContactKeyValue(key string) string {
+func skMapContactKeyValue(key string) string {
 	if key == "Country Code" {
 		return "country"
 	}
@@ -29,7 +28,7 @@ type SKTLDParser struct {
 	stopFunc func(string) bool
 }
 
-func (wb *SKTLDParser) GetName() string {
+func (skw *SKTLDParser) GetName() string {
 	return "sk"
 }
 
@@ -41,11 +40,11 @@ func NewSKTLDParser() *SKTLDParser {
 }
 
 func (skw *SKTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
-	w, err := skw.parser.Do(rawtext, skw.stopFunc, SKMap)
+	parsedWhois, err := skw.parser.Do(rawtext, skw.stopFunc, SKMap)
 	if err != nil {
 		return nil, err
 	}
-	// Parse for specific fields after default parser
+
 	var contactFlg string
 	contactsMap := map[string]map[string]interface{}{}
 	lines := strings.Split(rawtext, "\n")
@@ -57,21 +56,22 @@ func (skw *SKTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
 		switch key {
 		case "EPP Status":
 			for _, status := range strings.Split(val, ",") {
-				w.Statuses = append(w.Statuses, strings.TrimSpace(status))
+				parsedWhois.Statuses = append(parsedWhois.Statuses, strings.TrimSpace(status))
 			}
-			sort.Strings(w.Statuses)
+			sort.Strings(parsedWhois.Statuses)
 		case "Registrar":
 			if key, val, err := getKeyValFromLine(lines[idx+1]); err == nil && key == "Name" {
-				w.Registrar.Name = val
+				parsedWhois.Registrar.Name = val
 			}
 		case "Contact":
-			if val == w.Contacts.Registrant.ID {
+			switch val {
+			case parsedWhois.Contacts.Registrant.ID:
 				contactFlg = REGISTRANT
 				contactsMap[REGISTRANT] = make(map[string]interface{})
-			} else if val == w.Contacts.Admin.ID {
+			case parsedWhois.Contacts.Admin.ID:
 				contactFlg = ADMIN
 				contactsMap[ADMIN] = make(map[string]interface{})
-			} else if val == w.Contacts.Tech.ID {
+			case parsedWhois.Contacts.Tech.ID:
 				contactFlg = TECH
 				contactsMap[TECH] = make(map[string]interface{})
 			}
@@ -80,7 +80,7 @@ func (skw *SKTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
 			if len(contactFlg) == 0 {
 				continue
 			}
-			ckey := mapContactKeyValue(key)
+			ckey := skMapContactKeyValue(key)
 			if key == "Street" {
 				if _, ok := contactsMap[contactFlg][ckey]; !ok {
 					contactsMap[contactFlg][ckey] = []string{}
@@ -93,20 +93,7 @@ func (skw *SKTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
 	}
 	contacts, err := map2ParsedContacts(contactsMap)
 	if err == nil {
-		w.Contacts = contacts
+		parsedWhois.Contacts = contacts
 	}
-	return w, err
-}
-
-func map2ParsedContacts(cMap map[string]map[string]interface{}) (*Contacts, error) {
-	// Marshal from map and unmarshal to Whois Struct
-	jsoncontent, err := json.Marshal(cMap)
-	if err != nil {
-		return nil, err
-	}
-	w := Contacts{}
-	if err := json.Unmarshal(jsoncontent, &w); err != nil {
-		return nil, err
-	}
-	return &w, nil
+	return parsedWhois, err
 }

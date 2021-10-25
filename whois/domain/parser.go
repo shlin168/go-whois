@@ -32,6 +32,7 @@ var DefaultKeyMap map[string]string = map[string]string{
 	"Created":                                "created_date",
 	"Created On":                             "created_date",
 	"Registered on":                          "created_date",
+	"Registration Time":                      "created_date",
 	"Updated Date":                           "updated_date",
 	"Last updated":                           "updated_date",
 	"modified":                               "updated_date",
@@ -44,6 +45,7 @@ var DefaultKeyMap map[string]string = map[string]string{
 	"paid-till":                              "expired_date",
 	"Valid Until":                            "expired_date",
 	"Registrar Registration Expiration Date": "expired_date",
+	"Expiration Time":                        "expired_date",
 	"Domain Status":                          "statuses",
 	"Status":                                 "statuses",
 	"status":                                 "statuses",
@@ -59,6 +61,7 @@ var DefaultKeyMap map[string]string = map[string]string{
 	"Registrar WHOIS Server":                 "reg/whois_server",
 	"Registrant Name":                        "c/registrant/name",
 	"Registrant Email":                       "c/registrant/email",
+	"Registrant Contact Email":               "c/registrant/email",
 	"Registrant Organization":                "c/registrant/organization",
 	"Registrant Country":                     "c/registrant/country",
 	"Registrant City":                        "c/registrant/city",
@@ -138,9 +141,14 @@ type ITLDParser interface {
 func NewTLDDomainParser(tld string) ITLDParser {
 	switch tld {
 	case "sk":
-		return NewSKTLDParser()
-	case "uk", "co.uk":
-		return NewUKTLDParser()
+		return NewSKTLDParser() // whois.sk-nic.sk
+	case "uk", "co.uk", "ltd.uk", "me.uk", "net.uk", "org.uk", "plc.uk",
+		"ac.uk", "gov.uk":
+		return NewUKTLDParser() // whois.nic.uk, whois.ja.net
+	case "ua", "com.ua", "in.ua", "kh.ua", "kiev.ua", "lg.ua", "lviv.ua", "net.ua", "org.ua":
+		return NewUATLDParser() // whois.ua, whois.net.ua, whois.in.ua
+	case "tk":
+		return NewTKTLDParser() // whois.dot.tk
 	default:
 		return NewTLDParser()
 	}
@@ -296,6 +304,18 @@ func map2ParsedWhois(wMap map[string]interface{}) (*ParsedWhois, error) {
 		return nil, err
 	}
 	w := ParsedWhois{}
+	if err := json.Unmarshal(jsoncontent, &w); err != nil {
+		return nil, err
+	}
+	return &w, nil
+}
+
+func map2ParsedContacts(cMap map[string]map[string]interface{}) (*Contacts, error) {
+	jsoncontent, err := json.Marshal(cMap)
+	if err != nil {
+		return nil, err
+	}
+	w := Contacts{}
 	if err := json.Unmarshal(jsoncontent, &w); err != nil {
 		return nil, err
 	}

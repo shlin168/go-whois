@@ -1,16 +1,11 @@
 package domain
 
 import (
-	"github.com/shlin168/go-whois/whois/domain/testdata"
-	"github.com/shlin168/go-whois/whois/utils"
 	"testing"
-
-	"github.com/google/go-cmp/cmp"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 )
 
 func TestUKParser(t *testing.T) {
+	// whois.nic.uk
 	exp := &ParsedWhois{
 		DomainName: "abc.co.uk",
 		Registrar: &Registrar{
@@ -28,12 +23,26 @@ func TestUKParser(t *testing.T) {
 		ExpiredDate:    "2021-12-02T00:00:00+00:00",
 	}
 
-	parser := NewTLDDomainParser(utils.GetTLD("abc.co.uk"))
-	assert.Equal(t, "uk", parser.GetName())
+	checkParserResult(t, "abc.co.uk", "uk/case1.txt", "uk", exp)
+}
 
-	b, err := testdata.ReadRawtext("uk/case1.txt")
-	require.Nil(t, err)
-	parsedWhois, err := parser.GetParsedWhois(string(b))
-	assert.Nil(t, err)
-	assert.Empty(t, cmp.Diff(exp, parsedWhois))
+func TestUKParserJaNet(t *testing.T) {
+	// whois.ja.net
+	exp := &ParsedWhois{
+		DomainName: "sunderland.ac.uk",
+		Registrar: &Registrar{
+			Name: "University of Sunderland",
+		},
+		NameServers: []string{
+			"ns10.ja.net", "ns11.ja.net", "ns12.ja.net",
+		},
+		CreatedDateRaw: "Monday 10th November 2003",
+		CreatedDate:    "2003-11-10T00:00:00+00:00",
+		UpdatedDateRaw: "Wednesday 13th October 2021",
+		UpdatedDate:    "2021-10-13T00:00:00+00:00",
+		ExpiredDateRaw: "Tuesday 1st Feb 2022",
+		ExpiredDate:    "2022-02-01T00:00:00+00:00",
+	}
+
+	checkParserResult(t, "sunderland.ac.uk", "uk/case2.txt", "uk", exp)
 }
