@@ -1,0 +1,31 @@
+% La información a la que estás accediendo se provee exclusivamente para
+% fines relacionados con operaciones sobre nombres de dominios y DNS,
+% quedando absolutamente prohibido su uso para otros fines.
+%
+% La DIRECCIÓN NACIONAL DEL REGISTRO DE DOMINIOS DE INTERNET es depositaria
+% de la información que los usuarios declaran con la sola finalidad de
+% registrar nombres de dominio en ‘.ar’, para ser publicada en el sitio web
+% de NIC Argentina.
+%
+% La información personal que consta en la base de datos generada a partir
+% del sistema de registro de nombres de dominios se encuentra amparada por
+% la Ley N° 25326 “Protección de Datos Personales” y el Decreto
+% Reglamentario 1558/01.
+
+domain:		steamp.com.ar
+registrant:	27327101914
+registrar:	nicar
+registered:	2020-04-30 23:05:51.098561
+changed:	2021-06-09 15:27:12.357274
+expire:		2022-04-30 00:00:00
+
+contact:	27327101914
+name:		FERREYRA EVELYN AYELEN MAIVE
+registrar:	nicar
+created:	2020-04-30 23:05:50.906419
+changed:	2021-06-09 15:28:06.804861
+
+nserver:	ns3.hostmar.com ()
+nserver:	ns4.hostmar.com ()
+registrar:	nicar
+created:	2020-05-03 17:49:22.532630

@@ -88,8 +88,7 @@ func removeStRdNdThAndTrimMonInTime(t string) string {
 	// Tuesday 1st Feb 2022 -> Tuesday 1 Feb 2022
 	// Wednesday 13th October 2021 -> Wednesday 13 Oct 2021
 	ts := strings.Split(t, " ")
-	r := strings.NewReplacer("st", "", "nd", "", "rd", "", "th", "")
-	ts[1] = r.Replace(ts[1])
+	ts[1] = dayReplacer.Replace(ts[1])
 	if len(ts[2]) > 3 {
 		ts[2] = ts[2][:3]
 	}

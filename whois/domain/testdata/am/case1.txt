@@ -1,0 +1,44 @@
+%
+%AM TLD whois server #1
+% Please see 'whois -h whois.amnic.net help' for usage.
+%
+
+   Domain name: blogspot.am
+   Registrar:   abcdomain (ABCDomain LLC)
+   Status:      active, registrar locked
+
+   Registrant:
+      Google LLC
+      1600 Amphitheatre Parkway
+      Mountain View, CA,  94043
+      US
+
+   Administrative contact:
+      Domain Administrator
+      Google LLC
+      1600 Amphitheatre Parkway
+      Mountain View, CA, 94043
+      US
+      dns-admin@google.com
+      +1.6502530000
+      +1.6502530001
+
+   Technical contact:
+      Domain Administrator
+      Google LLC
+      1600 Amphitheatre Parkway
+      Mountain View, CA, 94043
+      US
+      dns-admin@google.com
+      +1.6502530000
+      +1.6502530001
+
+   DNS servers:
+      ns2.google.com
+      ns4.google.com
+      ns1.google.com
+      ns3.google.com
+
+   Registered:    2015-08-25
+   Last modified: 2021-08-06
+   Expires:       2022-08-25

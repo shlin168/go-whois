@@ -1,0 +1,46 @@
+Domain:
+     nov.as
+
+Domain Status:
+     Active
+     Transfer Prohibited by Registrar
+
+Registrant:
+     Benedict Jones
+
+Registrar:
+     101domain GRS Limited (http://www.101domain.com)
+
+Relevant dates:
+     Registered on 08th November 2012 at 00:00:00.000
+     Registry fee due on 08th November each year
+
+Registration status:
+     Registered until cancelled
+
+Name servers:
+     ns1.101domain.com
+     ns5.101domain.com
+
+
+WHOIS lookup made on Tue, 26 Oct 2021 at 16:08:05 BST
+
+This WHOIS information is provided for free by CIDR, operator of
+the backend registry for domain names ending in GG, JE, and AS.
+
+Copyright (c) and database right AS Domain Registry 1997 - 2021.
+
+You may not access this WHOIS server or use any data from it except
+as permitted by our Terms and Conditions which are published
+at http://www.channelisles.net/legal/whoisterms
+
+They include restrictions and prohibitions on
+
+- using or re-using the data for advertising;
+- using or re-using the service for commercial purposes without a licence;
+- repackaging, recompilation, redistribution or reuse;
+- obscuring, removing or hiding any or all of this notice;
+- exceeding query rate or volume limits.
+
+The data is provided on an 'as-is' basis and may lag behind the
+register. Access may be withdrawn or restricted at any time.

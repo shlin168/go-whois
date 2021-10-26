@@ -134,7 +134,16 @@ func NewDomainWhoisServerMap(xmlpath string) (DomainWhoisServerMap, error) {
 	if err == nil {
 		DomainWhoisServerMap["mc"][0].AvailPtn = ptn
 	}
-	// my, za
+	// wrong whois server in whois-server-list.xml
+	// ai: whois.ai -> whois.nic.ai
+	DomainWhoisServerMap["ai"] = []WhoisServer{{Host: "whois.nic.ai"}}
+
+	// unfilled whois server
+	for _, tld := range []string{"ar", "blogspot.com.ar", "com.ar", "edu.ar", "gob.ar",
+		"gov.ar", "int.ar", "mil.ar", "net.ar", "org.ar", "tur.ar"} {
+		DomainWhoisServerMap[tld] = []WhoisServer{{Host: "whois.nic.ar"}}
+	}
+
 	return DomainWhoisServerMap, nil
 }
 

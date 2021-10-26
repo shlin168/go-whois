@@ -20,8 +20,11 @@ const (
 	BILLING    = "billing"
 )
 
+var dayReplacer = strings.NewReplacer("st", "", "nd", "", "rd", "", "th", "")
+
 var DefaultKeyMap map[string]string = map[string]string{
 	"Domain Name":                            "domain",
+	"Domain name":                            "domain",
 	"domain":                                 "domain",
 	"Domain":                                 "domain",
 	"Name Server":                            "name_servers",
@@ -33,11 +36,13 @@ var DefaultKeyMap map[string]string = map[string]string{
 	"Created On":                             "created_date",
 	"Registered on":                          "created_date",
 	"Registration Time":                      "created_date",
+	"Registered":                             "created_date",
 	"Updated Date":                           "updated_date",
 	"Last updated":                           "updated_date",
 	"modified":                               "updated_date",
 	"Updated":                                "updated_date",
 	"Last Updated On":                        "updated_date",
+	"Last modified":                          "updated_date",
 	"Registry Expiry Date":                   "expired_date",
 	"expires":                                "expired_date",
 	"Expiration Date":                        "expired_date",
@@ -46,6 +51,7 @@ var DefaultKeyMap map[string]string = map[string]string{
 	"Valid Until":                            "expired_date",
 	"Registrar Registration Expiration Date": "expired_date",
 	"Expiration Time":                        "expired_date",
+	"Expires":                                "expired_date",
 	"Domain Status":                          "statuses",
 	"Status":                                 "statuses",
 	"status":                                 "statuses",
@@ -140,6 +146,13 @@ type ITLDParser interface {
 //		parsedWhois, err := parser.GetParsedWhois(rawtext)
 func NewTLDDomainParser(tld string) ITLDParser {
 	switch tld {
+	case "ar", "blogspot.com.ar", "com.ar", "edu.ar", "gob.ar",
+		"gov.ar", "int.ar", "mil.ar", "net.ar", "org.ar", "tur.ar":
+		return NewARTLDParser() // whois.nic.ar
+	case "am":
+		return NewAMTLDParser() // whois.amnic.net
+	case "as":
+		return NewASTLDParser() // whois.nic.as
 	case "sk":
 		return NewSKTLDParser() // whois.sk-nic.sk
 	case "uk", "co.uk", "ltd.uk", "me.uk", "net.uk", "org.uk", "plc.uk",

@@ -157,7 +157,7 @@ Input domain is parsed by [`publicsuffix`](https://pkg.go.dev/golang.org/x/net/p
 |------------------|----------------------------| ------|-------|-----------------------------| ----------------| ----------------|
 | abc.github.io    | [abc.github.io, github.io] | false | false | [github.io]                 | github.io       | github.io       |
 | pooch.co.uk      | [pooch.co.uk, co.uk]       | true  | true  | [pooch.co.uk, co.uk]        | BOTH            | pooch.co.uk     |
-| frolic.yalta.ua  | [frolic.yalta.ua, yalta.ua]| true  | false | [frolic.yalta.ua, yalta.ua] | frolic.yalta.ua | frolic.yalta.ua |
+| frolic.yalta.ua  | [frolic.yalta.ua, yalta.ua]| true  | false | [frolic.yalta.ua, yalta.ua] | BOTH            | frolic.yalta.ua |
 | bruker.co.ua     | [bruker.co.ua, co.ua]      | false | true  | [bruker.co.ua, co.ua]       | BOTH            | bruker.co.ua    |
 | registry.co.com  | [registry.co.com, co.com]  | false | true  | [registry.co.com, co.com]   | co.com          | co.com          |
 | www.google.com   | [google.com]               | true  | false | [google.com]                | google.com      | google.com      |

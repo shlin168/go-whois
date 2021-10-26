@@ -1,0 +1,34 @@
+%
+%AM TLD whois server #1
+% Please see 'whois -h whois.amnic.net help' for usage.
+%
+
+   Domain name: amazon.am
+   Registrar:   abcdomain (ABCDomain LLC)
+   Status:      active
+
+   Registrant:
+      Domain Privacy
+      REDACTED FOR PRIVACY
+      REDACTED FOR PRIVACY,  0000
+      AM
+
+   Private contact:
+      REDACTED FOR PRIVACY
+      REDACTED FOR PRIVACY
+      REDACTED FOR PRIVACY, 0000
+      AM
+      privacy@internet.am
+      00000000000
+
+   DNS servers:
+      ns1.p31.dynect.net
+      ns2.p31.dynect.net
+      ns3.p31.dynect.net
+      pdns1.ultradns.net
+      pdns2.ultradns.net
+      pdns3.ultradns.org
+
+   Registered:    1999-09-09
+   Last modified: 2021-03-12
+   Expires:       2022-04-15
