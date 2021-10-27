@@ -34,7 +34,7 @@ func TestAMParserBlogSpot(t *testing.T) {
 		},
 	}
 
-	checkParserResult(t, "blogspot.am", "am/case1.txt", "am", exp)
+	checkParserResult(t, "whois.amnic.net", "am/case1.txt", "am", exp)
 }
 
 func TestAMParser(t *testing.T) {
@@ -61,5 +61,5 @@ func TestAMParser(t *testing.T) {
 		},
 	}
 
-	checkParserResult(t, "amazon.am", "am/case2.txt", "am", exp)
+	checkParserResult(t, "whois.amnic.net", "am/case2.txt", "am", exp)
 }

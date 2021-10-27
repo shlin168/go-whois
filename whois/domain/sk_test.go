@@ -46,5 +46,5 @@ func TestSKParser(t *testing.T) {
 		},
 	}
 
-	checkParserResult(t, "amazon.sk", "sk/case1.txt", "sk", exp)
+	checkParserResult(t, "whois.sk-nic.sk", "sk/case1.txt", "sk", exp)
 }

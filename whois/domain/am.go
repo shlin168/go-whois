@@ -46,7 +46,7 @@ func (amw *AMTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
 		}
 		switch keyword := strings.TrimRight(line, ":"); keyword {
 		case "DNS servers":
-			for i := 1; i <= 20; i++ {
+			for i := 1; i <= maxNServer; i++ {
 				ns := strings.TrimSpace(lines[idx+i])
 				if len(ns) == 0 {
 					break

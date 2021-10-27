@@ -1,53 +1,57 @@
 package domain
 
 import (
-	"sort"
 	"strings"
 
 	"github.com/shlin168/go-whois/whois/utils"
 )
 
-var ARMap map[string]string = map[string]string{
-	"name": "c/registrant/name",
+var BRMap map[string]string = map[string]string{
+	"owner": "c/registrant/name",
 }
 
-type ARParser struct{}
+type BRParser struct{}
 
-type ARTLDParser struct {
+type BRTLDParser struct {
 	parser   IParser
 	stopFunc func(string) bool
 }
 
-func NewARTLDParser() *ARTLDParser {
-	return &ARTLDParser{
-		parser: NewParser(),
+func NewBRTLDParser() *BRTLDParser {
+	return &BRTLDParser{
+		parser:   NewParser(),
+		stopFunc: func(line string) bool { return strings.HasPrefix(line, "% Security and mail") },
 	}
 }
 
-func (arw *ARTLDParser) GetName() string {
-	return "ar"
+func (brw *BRTLDParser) GetName() string {
+	return "br"
 }
 
-func (arw *ARTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
-	parsedWhois, err := arw.parser.Do(rawtext, nil, ARMap)
+func (brw *BRTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
+	parsedWhois, err := brw.parser.Do(rawtext, brw.stopFunc, BRMap)
 	if err != nil {
 		return nil, err
 	}
 
 	var createDone, updateDone, expireDone bool
-	// var contactFlg string
-	// contactsMap := map[string]map[string]interface{}{}
 	lines := strings.Split(rawtext, "\n")
 	for _, line := range lines {
+		if brw.stopFunc(line) {
+			break
+		}
 		key, val, err := getKeyValFromLine(line)
 		if err != nil {
 			continue
 		}
 		switch key {
-		case "registered":
+		case "created":
 			if !createDone {
 				parsedWhois.CreatedDateRaw = val
-				parsedWhois.CreatedDate, _ = utils.GuessTimeFmtAndConvert(parsedWhois.CreatedDateRaw, WhoisTimeFmt)
+				if i := strings.Index(val, "#"); i != -1 {
+					val = strings.TrimSpace(val[:i])
+				}
+				parsedWhois.CreatedDate, _ = utils.GuessTimeFmtAndConvert(val, WhoisTimeFmt)
 				createDone = true
 			}
 		case "changed":
@@ -56,7 +60,7 @@ func (arw *ARTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
 				parsedWhois.UpdatedDate, _ = utils.GuessTimeFmtAndConvert(parsedWhois.UpdatedDateRaw, WhoisTimeFmt)
 				updateDone = true
 			}
-		case "expire":
+		case "expires":
 			if !expireDone {
 				parsedWhois.ExpiredDateRaw = val
 				parsedWhois.ExpiredDate, _ = utils.GuessTimeFmtAndConvert(parsedWhois.ExpiredDateRaw, WhoisTimeFmt)
@@ -64,9 +68,6 @@ func (arw *ARTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
 			}
 		}
 	}
-	for i := 0; i < len(parsedWhois.NameServers); i++ {
-		parsedWhois.NameServers[i] = strings.Split(parsedWhois.NameServers[i], " ")[0]
-	}
-	sort.Strings(parsedWhois.NameServers)
+
 	return parsedWhois, nil
 }

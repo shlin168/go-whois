@@ -18,6 +18,8 @@ const (
 	ADMIN      = "admin"
 	TECH       = "tech"
 	BILLING    = "billing"
+
+	maxNServer = 20
 )
 
 var dayReplacer = strings.NewReplacer("st", "", "nd", "", "rd", "", "th", "")
@@ -39,14 +41,17 @@ var DefaultKeyMap map[string]string = map[string]string{
 	"Registered":                             "created_date",
 	"Updated Date":                           "updated_date",
 	"Last updated":                           "updated_date",
+	"Last Update":                            "updated_date",
 	"modified":                               "updated_date",
 	"Updated":                                "updated_date",
 	"Last Updated On":                        "updated_date",
 	"Last modified":                          "updated_date",
+	"Last Modified":                          "updated_date",
 	"Registry Expiry Date":                   "expired_date",
 	"expires":                                "expired_date",
 	"Expiration Date":                        "expired_date",
 	"Expiry date":                            "expired_date",
+	"Expire Date":                            "expired_date",
 	"paid-till":                              "expired_date",
 	"Valid Until":                            "expired_date",
 	"Registrar Registration Expiration Date": "expired_date",
@@ -142,26 +147,30 @@ type ITLDParser interface {
 // NewTLDDomainParser return different parser for different TLD
 // If adding new parser for specific TLDs, new case match should be added to this function
 // Usage:
-//		parser := NewTLDDomainParser(tld)
+//		parser := NewTLDDomainParser(whois_server)
 //		parsedWhois, err := parser.GetParsedWhois(rawtext)
-func NewTLDDomainParser(tld string) ITLDParser {
-	switch tld {
-	case "ar", "blogspot.com.ar", "com.ar", "edu.ar", "gob.ar",
-		"gov.ar", "int.ar", "mil.ar", "net.ar", "org.ar", "tur.ar":
-		return NewARTLDParser() // whois.nic.ar
-	case "am":
-		return NewAMTLDParser() // whois.amnic.net
-	case "as":
-		return NewASTLDParser() // whois.nic.as
-	case "sk":
-		return NewSKTLDParser() // whois.sk-nic.sk
-	case "uk", "co.uk", "ltd.uk", "me.uk", "net.uk", "org.uk", "plc.uk",
-		"ac.uk", "gov.uk":
-		return NewUKTLDParser() // whois.nic.uk, whois.ja.net
-	case "ua", "com.ua", "in.ua", "kh.ua", "kiev.ua", "lg.ua", "lviv.ua", "net.ua", "org.ua":
-		return NewUATLDParser() // whois.ua, whois.net.ua, whois.in.ua
-	case "tk":
-		return NewTKTLDParser() // whois.dot.tk
+func NewTLDDomainParser(whoisServer string) ITLDParser {
+	switch whoisServer {
+	case "whois.nic.ar":
+		return NewARTLDParser() // ar
+	case "whois.amnic.net":
+		return NewAMTLDParser() // am
+	case "whois.nic.as":
+		return NewASTLDParser() // as
+	case "whois.nic.br":
+		return NewBRTLDParser() // br
+	case "whois.sk-nic.sk":
+		return NewSKTLDParser() // sk
+	case "whois.nic.uk", "whois.ja.net":
+		return NewUKTLDParser() // uk
+	case "whois.ua", "whois.net.ua", "whois.in.ua":
+		return NewUATLDParser() // ua
+	case "whois.dot.tk":
+		return NewTKTLDParser() // tk
+	case "whois.domain-registry.nl":
+		return NewNLTLDParser() // nl
+	case "whois.nic.it":
+		return NewITTLDParser() // it
 	default:
 		return NewTLDParser()
 	}
@@ -360,9 +369,10 @@ func WhoisNotFound(rawtext string) bool {
 }
 
 func getKeyValFromLine(line string) (key, val string, err error) {
-	kw := strings.SplitN(strings.TrimSpace(line), ":", 2)
-	if len(kw) != 2 {
-		return "", "", errors.New("not valid line")
+	line = strings.TrimSpace(line)
+	kw := strings.SplitN(line, ":", 2)
+	if len(kw) < 2 {
+		return line, "", errors.New("not valid line")
 	}
 	return strings.TrimSpace(kw[0]), strings.TrimSpace(kw[1]), nil
 }

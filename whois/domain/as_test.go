@@ -17,5 +17,5 @@ func TestASParser(t *testing.T) {
 		Statuses:       []string{"Active", "Transfer Prohibited by Registrar"},
 	}
 
-	checkParserResult(t, "nov.as", "as/case1.txt", "as", exp)
+	checkParserResult(t, "whois.nic.as", "as/case1.txt", "as", exp)
 }

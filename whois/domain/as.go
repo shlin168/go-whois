@@ -44,7 +44,7 @@ func (asw *ASTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
 			}
 			parsedWhois.Registrar.Name = strings.TrimSpace(lines[idx+1])
 		case "Name servers":
-			for i := 1; i <= 20; i++ {
+			for i := 1; i <= maxNServer; i++ {
 				ns := strings.TrimSpace(lines[idx+i])
 				if len(ns) == 0 {
 					break

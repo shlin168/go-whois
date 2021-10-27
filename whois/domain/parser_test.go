@@ -8,11 +8,10 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/shlin168/go-whois/whois/domain/testdata"
-	"github.com/shlin168/go-whois/whois/utils"
 )
 
-func checkParserResult(t *testing.T, ps, rawtextPath, expParser string, exp *ParsedWhois) {
-	parser := NewTLDDomainParser(utils.GetTLD(ps))
+func checkParserResult(t *testing.T, whoisServer, rawtextPath, expParser string, exp *ParsedWhois) {
+	parser := NewTLDDomainParser(whoisServer)
 	assert.Equal(t, expParser, parser.GetName())
 
 	b, err := testdata.ReadRawtext(rawtextPath)
@@ -56,7 +55,7 @@ func TestDefaultParserIO(t *testing.T) {
 			Tech:       c,
 		},
 	}
-	checkParserResult(t, "github.io", "default/case_io.txt", "default", exp)
+	checkParserResult(t, "default", "default/case_io.txt", "default", exp)
 }
 
 func TestDefaultParserSE(t *testing.T) {
@@ -77,7 +76,7 @@ func TestDefaultParserSE(t *testing.T) {
 		ExpiredDateRaw: "2022-06-13",
 		Statuses:       []string{"ok"},
 	}
-	checkParserResult(t, "lando.se", "default/case_se.txt", "default", exp)
+	checkParserResult(t, "default", "default/case_se.txt", "default", exp)
 }
 
 func TestFoundByKey(t *testing.T) {

@@ -276,7 +276,7 @@ func (c *Client) QueryPublicSuffixs(ctx context.Context, pslist []string, whoisS
 // Parse get parser based on TLD and use it to parse rawtext. Also check if rawtext contains **not found** keywords
 func (c *Client) Parse(ps string, wrt *Raw) (*wd.Whois, error) {
 	tld := utils.GetTLD(ps)
-	parser := wd.NewTLDDomainParser(tld)
+	parser := wd.NewTLDDomainParser(wrt.Server)
 	c.logger.WithFields(logrus.Fields{"tld": tld, "parser": parser.GetName()}).Info("parse")
 
 	parsedWhois, err := parser.GetParsedWhois(wrt.Rawtext)

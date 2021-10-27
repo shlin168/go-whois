@@ -7,7 +7,9 @@ import (
 	"github.com/shlin168/go-whois/whois/utils"
 )
 
-const tFmt = "Monday 2 Jan 2006"
+const (
+	tFmt = "Monday 2 Jan 2006"
+)
 
 var UKMap = map[string]string{
 	"URL": "reg/url",
@@ -37,7 +39,6 @@ func (ukw *UKTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
 		return nil, err
 	}
 
-	// Parse for specific fields after default parser
 	lines := strings.Split(rawtext, "\n")
 	for idx, line := range lines {
 		line = strings.TrimSpace(line)
@@ -53,7 +54,7 @@ func (ukw *UKTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
 			}
 			parsedWhois.Registrar.Name = strings.TrimSpace(lines[idx+1])
 		case "Name servers", "Servers":
-			for i := 1; i <= 20; i++ {
+			for i := 1; i <= maxNServer; i++ {
 				ns := strings.TrimSpace(lines[idx+i])
 				if len(ns) == 0 {
 					break
@@ -88,6 +89,9 @@ func removeStRdNdThAndTrimMonInTime(t string) string {
 	// Tuesday 1st Feb 2022 -> Tuesday 1 Feb 2022
 	// Wednesday 13th October 2021 -> Wednesday 13 Oct 2021
 	ts := strings.Split(t, " ")
+	if len(ts) < 3 {
+		return t
+	}
 	ts[1] = dayReplacer.Replace(ts[1])
 	if len(ts[2]) > 3 {
 		ts[2] = ts[2][:3]

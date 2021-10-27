@@ -23,7 +23,7 @@ func TestUKParser(t *testing.T) {
 		ExpiredDate:    "2021-12-02T00:00:00+00:00",
 	}
 
-	checkParserResult(t, "abc.co.uk", "uk/case1.txt", "uk", exp)
+	checkParserResult(t, "whois.nic.uk", "uk/case1.txt", "uk", exp)
 }
 
 func TestUKParserJaNet(t *testing.T) {
@@ -44,5 +44,5 @@ func TestUKParserJaNet(t *testing.T) {
 		ExpiredDate:    "2022-02-01T00:00:00+00:00",
 	}
 
-	checkParserResult(t, "sunderland.ac.uk", "uk/case2.txt", "uk", exp)
+	checkParserResult(t, "whois.ja.net", "uk/case2.txt", "uk", exp)
 }

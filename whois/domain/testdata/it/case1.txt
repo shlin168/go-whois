@@ -1,0 +1,61 @@
+*********************************************************************
+* Please note that the following result could be a subgroup of      *
+* the data contained in the database.                               *
+*                                                                   *
+* Additional information can be visualized at:                      *
+* http://web-whois.nic.it                                           *
+* Privacy Information: http://web-whois.nic.it/privacy              *
+*********************************************************************
+
+Domain:             amazon.it
+Status:             ok
+Signed:             no
+Created:            2000-02-10 00:00:00
+Last Update:        2021-01-28 00:51:03
+Expire Date:        2022-01-12
+
+Registrant
+  Organization:     Amazon Europe Core S.à.r.l.
+  Address:          38 avenue John F. Kennedy
+                    Luxembourg City
+                    L-1855
+                    N.D.
+                    LU
+  Created:          2018-12-13 10:22:03
+  Last Update:      2018-12-13 10:22:03
+
+Admin Contact
+  Name:             Scott Hayden
+  Organization:     Amazon Europe Core S.à.r.l.
+  Address:          38 avenue John F. Kennedy
+                    Luxembourg City
+                    L-1855
+                    N.D.
+                    LU
+  Created:          2018-12-13 10:29:05
+  Last Update:      2018-12-13 10:29:05
+
+Technical Contacts
+  Name:             Amazon Hostmaster
+  Organization:     Amazon.com, Inc.
+  Address:          PO BOX 81226
+                    Seattle
+                    98108-1300
+                    WA
+                    US
+  Created:          2016-07-21 17:41:03
+  Last Update:      2016-07-21 17:41:03
+
+Registrar
+  Organization:     Hogan Lovells (Paris) LLP
+  Name:             ANCHOVY-REG
+  DNSSEC:           no
+
+
+Nameservers
+  pdns1.ultradns.net
+  pdns3.ultradns.org
+  pdns4.ultradns.org
+  pdns5.ultradns.info
+  ns1.p31.dynect.net
+  ns2.p31.dynect.net

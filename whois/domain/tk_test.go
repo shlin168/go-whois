@@ -46,5 +46,5 @@ func TestTKParser(t *testing.T) {
 		},
 	}
 
-	checkParserResult(t, "amazon.tk", "tk/case1.txt", "tk", exp)
+	checkParserResult(t, "whois.dot.tk", "tk/case1.txt", "tk", exp)
 }

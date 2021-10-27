@@ -63,7 +63,7 @@ func (tkw *TKTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
 			contactFlg = TECH
 			contactsMap[TECH] = make(map[string]interface{})
 		case "Domain Nameservers":
-			for i := 1; i <= 20; i++ {
+			for i := 1; i <= maxNServer; i++ {
 				ns := strings.TrimSpace(lines[idx+i])
 				if len(ns) == 0 {
 					break
