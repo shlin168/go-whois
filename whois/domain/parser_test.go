@@ -75,6 +75,7 @@ func TestDefaultParserSE(t *testing.T) {
 		ExpiredDate:    "2022-06-13T00:00:00+00:00",
 		ExpiredDateRaw: "2022-06-13",
 		Statuses:       []string{"ok"},
+		Dnssec:         "unsigned delegation",
 	}
 	checkParserResult(t, "default", "default/case_se.txt", "default", exp)
 }
