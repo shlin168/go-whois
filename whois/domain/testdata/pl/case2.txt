@@ -1,0 +1,29 @@
+DOMAIN NAME:           inpost.pl
+registrant type:       organization
+nameservers:           ns.easypack24.net.
+                       ns.inpost.pl. [91.216.25.126]
+                       ns.integer.pl. [91.216.25.127]
+                       ns.paczkomaty.pl. [52.28.236.63]
+created:               2006.04.10 12:46:55
+last modified:         2021.04.09 16:10:50
+renewal date:          2022.04.10 12:46:55
+
+no option
+
+dnssec:                Unsigned
+
+
+REGISTRAR:
+nazwa.pl sp. z o.o.
+ul. Mieczysława Medweckiego 17
+31-870 Kraków
+Polska/Poland
++48.801 33 22 33
++48.22 454 48 10
++48.22 454 48 08
+kontakt@nazwa.pl
+www.nazwa.pl
+
+WHOIS database responses: https://dns.pl/en/whois
+
+WHOIS displays data with a delay not exceeding 15 minutes in relation to the .pl Registry system

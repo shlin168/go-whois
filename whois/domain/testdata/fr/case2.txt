@@ -1,0 +1,110 @@
+%%
+%% This is the AFNIC Whois server.
+%%
+%% complete date format : YYYY-MM-DDThh:mm:ssZ
+%% short date format    : DD/MM
+%% version              : FRNIC-2.5
+%%
+%% Rights restricted by copyright.
+%% See https://www.afnic.fr/en/products-and-services/services/whois/whois-special-notice/
+%%
+%% Use '-h' option to obtain more information about this service.
+%%
+%% [118.160.70.219 REQUEST] >> roku-gin.fr
+%%
+%% RL Net [##########] - RL IP [#########.]
+%%
+
+domain:      roku-gin.fr
+status:      ACTIVE
+hold:        NO
+holder-c:    XP2148-FRNIC
+admin-c:     XP2148-FRNIC
+tech-c:      GR283-FRNIC
+zone-c:      NFC1-FRNIC
+nsl-id:      NSL2537-FRNIC
+registrar:   GANDI
+Expiry Date: 2022-10-22T07:52:30Z
+created:     2021-10-22T07:52:30Z
+source:      FRNIC
+
+ns-list:     NSL2537-FRNIC
+nserver:     ns-216-b.gandi.net
+nserver:     ns-245-a.gandi.net
+nserver:     ns-49-c.gandi.net
+source:      FRNIC
+
+registrar:   GANDI
+type:        Isp Option 1
+address:     63-65 boulevard Massena
+address:     75013 PARIS
+country:     FR
+phone:       +33 1 70 37 76 61
+fax-no:      +33 1 43 73 18 51
+e-mail:      support@support.gandi.net
+website:     https://www.gandi.net/fr/tlds/fr/
+anonymous:   NO
+registered:  2004-03-09T12:00:00Z
+source:      FRNIC
+
+nic-hdl:     XP2148-FRNIC
+type:        ORGANIZATION
+contact:     X-PRIME
+address:     X-PRIME
+address:     10 rue des trente six ponts
+address:     31400 TOULOUSE
+country:     FR
+phone:       +33.534449678
+e-mail:      4b1ca811c7b65d6705314d8fc7e4bd4e-31639884@contact.gandi.net
+registrar:   GANDI
+changed:     2021-10-22T07:52:28Z nic@nic.fr
+anonymous:   NO
+obsoleted:   NO
+eligstatus:  not identified
+reachstatus: not identified
+source:      FRNIC
+
+nic-hdl:     XP2148-FRNIC
+type:        ORGANIZATION
+contact:     X-PRIME
+address:     X-PRIME
+address:     10 rue des trente six ponts
+address:     31400 TOULOUSE
+country:     FR
+phone:       +33.534449678
+e-mail:      4b1ca811c7b65d6705314d8fc7e4bd4e-31639884@contact.gandi.net
+registrar:   GANDI
+changed:     2021-10-22T07:52:28Z nic@nic.fr
+anonymous:   NO
+obsoleted:   NO
+eligstatus:  not identified
+reachstatus: not identified
+source:      FRNIC
+
+nic-hdl:     GR283-FRNIC
+type:        ROLE
+contact:     GANDI ROLE
+address:     Gandi
+address:     15, place de la Nation
+address:     75011 Paris
+country:     FR
+e-mail:      noc@gandi.net
+trouble:     -------------------------------------------------
+trouble:     GANDI is an ICANN accredited registrar
+trouble:     for more information:
+trouble:     Web:   http://www.gandi.net
+trouble:     -------------------------------------------------
+trouble:     - network troubles: noc@gandi.net
+trouble:     - SPAM:             abuse@support.gandi.net
+trouble:     -------------------------------------------------
+admin-c:     NL346-FRNIC
+tech-c:      NL346-FRNIC
+tech-c:      TUF1-FRNIC
+notify:      noc@gandi.net
+registrar:   GANDI
+changed:     2006-03-03T14:39:12Z noc@gandi.net
+anonymous:   NO
+obsoleted:   NO
+eligstatus:  not identified
+reachstatus: not identified
+source:      FRNIC

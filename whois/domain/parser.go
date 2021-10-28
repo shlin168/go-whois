@@ -37,6 +37,7 @@ var defaultKeyMap map[string]string = map[string]string{
 	"name server":                            "name_servers",
 	"nserver":                                "name_servers",
 	"nameserver":                             "name_servers",
+	"nameservers":                            "name_servers",
 	"creation date":                          "created_date",
 	"created":                                "created_date",
 	"created on":                             "created_date",
@@ -157,20 +158,26 @@ func NewTLDDomainParser(whoisServer string) ITLDParser {
 		return NewAMTLDParser() // am
 	case "whois.nic.as":
 		return NewASTLDParser() // as
+	case "whois.dns.be":
+		return NewBETLDParser() // be
 	case "whois.nic.br":
 		return NewBRTLDParser() // br
+	case "whois.nic.fr":
+		return NewFRTLDParser() // fr
+	case "whois.nic.it":
+		return NewITTLDParser() // it
+	case "whois.domain-registry.nl":
+		return NewNLTLDParser() // nl
+	case "whois.dns.pl":
+		return NewPLTLDParser() // pl
 	case "whois.sk-nic.sk":
 		return NewSKTLDParser() // sk
+	case "whois.dot.tk":
+		return NewTKTLDParser() // tk
 	case "whois.nic.uk", "whois.ja.net":
 		return NewUKTLDParser() // uk
 	case "whois.ua", "whois.net.ua", "whois.in.ua":
 		return NewUATLDParser() // ua
-	case "whois.dot.tk":
-		return NewTKTLDParser() // tk
-	case "whois.domain-registry.nl":
-		return NewNLTLDParser() // nl
-	case "whois.nic.it":
-		return NewITTLDParser() // it
 	default:
 		return NewTLDParser()
 	}

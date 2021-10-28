@@ -1,0 +1,32 @@
+DOMAIN NAME:           amazon.pl
+registrant type:       organization
+nameservers:           ns1.p31.dynect.net.
+                       ns2.p31.dynect.net.
+                       ns3.p31.dynect.net.
+                       ns4.p31.dynect.net.
+                       pdns1.ultradns.net.
+                       pdns2.ultradns.net.
+                       pdns3.ultradns.org.
+                       pdns4.ultradns.org.
+                       pdns5.ultradns.info.
+created:               1998.10.06 13:00:00
+last modified:         2021.10.01 01:01:27
+renewal date:          2022.10.05 14:00:00
+
+option created:        2018.11.23 14:25:23
+option expiration date:       2021.11.23 14:25:23
+
+dnssec:                Unsigned
+
+
+REGISTRAR:
+Com Laude t/a Com Laude
+28-30 Little Russell Street, London, WC1A 2HN,
+United Kingdom
+Telephone: +44 20 7421 8250
+Email: admin@comlaude.com
+
+
+WHOIS database responses: https://dns.pl/en/whois
+
+WHOIS displays data with a delay not exceeding 15 minutes in relation to the .pl Registry system

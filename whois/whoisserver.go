@@ -138,6 +138,15 @@ func NewDomainWhoisServerMap(xmlpath string) (DomainWhoisServerMap, error) {
 	// ai: whois.ai -> whois.nic.ai
 	DomainWhoisServerMap["ai"] = []WhoisServer{{Host: "whois.nic.ai"}}
 
+	// Not available server
+	// in: whois.inregistry.in -> whois.registry.in
+	//DomainWhoisServerMap["in"] = []WhoisServer{{Host: "whois.registry.in"}}
+	for k, v := range DomainWhoisServerMap {
+		if len(v) > 0 && v[0].Host == "whois.inregistry.in" {
+			DomainWhoisServerMap[k] = []WhoisServer{{Host: "whois.registry.in"}}
+		}
+	}
+
 	// unfilled whois server
 	for _, tld := range []string{"ar", "blogspot.com.ar", "com.ar", "edu.ar", "gob.ar",
 		"gov.ar", "int.ar", "mil.ar", "net.ar", "org.ar", "tur.ar"} {
