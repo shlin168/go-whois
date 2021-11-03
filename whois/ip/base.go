@@ -9,7 +9,7 @@ import (
 /*
 * ref.
 * 	https://www.arin.net/resources/registry/whois/
-*
+*   https://www.lacnic.net/1040/2/lacnic/lacnics-whois
  */
 
 type Whois struct {
@@ -28,11 +28,13 @@ type ParsedWhois struct {
 // and show the organizations and POCs with authority over them.
 // To reposrt networtk abuse, contact mnt-irt
 type Network struct {
-	Inetnum string `json:"inetnum,omitempty"`
-	Range   *Range `json:"range,omitempty"`
-	Org     string `json:"org,omitempty"`
-	Netname string `json:"netname,omitempty"`
-	MntIrt  string `json:"mnt_irt,omitempty"`
+	Inetnum  string `json:"inetnum,omitempty"`
+	Range    *Range `json:"range,omitempty"`
+	Org      string `json:"org,omitempty"`
+	Netname  string `json:"netname,omitempty"`
+	MntIrt   string `json:"mnt_irt,omitempty"`
+	OriginAS string `json:"asn,omitempty"` // Origin As Network
+	Parent   string `json:"parent,omitempty"`
 	Contact
 }
 
@@ -44,8 +46,8 @@ type Range struct {
 }
 
 type Route struct {
-	Origin string `json:"origin,omitempty"`
-	Route  string `json:"route,omitempty"`
+	OriginAS string `json:"asn,omitempty"`
+	Route    string `json:"route,omitempty"`
 	Contact
 }
 
@@ -66,8 +68,11 @@ type Contact struct {
 	Email          []string `json:"email,omitempty"`
 	Description    []string `json:"descr,omitempty"`
 	Remarks        []string `json:"remarks,omitempty"`
-	ContactAdmin   []string `json:"admin,omitempty"` // admin-c, for troubleshooting
-	ContactTech    []string `json:"tech,omitempty"`  // tech-c, for troubleshooting
+	ContactAdmin   []string `json:"admin,omitempty"`   // admin-c, for troubleshooting
+	ContactTech    []string `json:"tech,omitempty"`    // tech-c, for troubleshooting
+	ContactOwner   []string `json:"owner,omitempty"`   // owner-c
+	ContactRouting []string `json:"routing,omitempty"` // routing-c
+	ContactAbuse   []string `json:"abuse,omitempty"`   // abuse-c
 	NotifiedEmail  []string `json:"notified_email,omitempty"`
 	AbuseMailbox   []string `json:"abuse_mailbox,omitempty"`
 	MntBy          []string `json:"mnt_by,omitempty"`

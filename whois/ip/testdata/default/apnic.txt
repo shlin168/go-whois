@@ -1,0 +1,70 @@
+% [whois.apnic.net]
+% Whois data copyright terms    http://www.apnic.net/db/dbcopyright.html
+
+% Information related to '110.8.0.0 - 110.15.255.255'
+
+% Abuse contact for '110.8.0.0 - 110.15.255.255' is 'irt@nic.or.kr'
+
+inetnum:        110.8.0.0 - 110.15.255.255
+netname:        broadNnet
+descr:          SK Broadband Co Ltd
+admin-c:        IM670-AP
+tech-c:         IM670-AP
+country:        KR
+status:         ALLOCATED PORTABLE
+mnt-by:         MNT-KRNIC-AP
+mnt-irt:        IRT-KRNIC-KR
+last-modified:  2017-02-03T00:38:16Z
+source:         APNIC
+
+irt:            IRT-KRNIC-KR
+address:        Jeollanam-do Naju-si Jinheung-gil
+e-mail:         irt@nic.or.kr
+abuse-mailbox:  irt@nic.or.kr
+admin-c:        IM574-AP
+tech-c:         IM574-AP
+auth:           # Filtered
+remarks:        irt@nic.or.kr was validated on 2020-04-09
+mnt-by:         MNT-KRNIC-AP
+last-modified:  2021-06-15T06:21:49Z
+source:         APNIC
+
+person:         IP Manager
+address:        Seoul Jung-gu Toegye-ro 24
+country:        KR
+phone:          +82-80-828-2106
+e-mail:         ip-adm@skbroadband.com
+nic-hdl:        IM670-AP
+mnt-by:         MNT-KRNIC-AP
+last-modified:  2021-10-05T05:20:03Z
+source:         APNIC
+
+% Information related to '110.8.0.0 - 110.15.255.255'
+
+inetnum:        110.8.0.0 - 110.15.255.255
+netname:        broadNnet-KR
+descr:          SK Broadband Co Ltd
+country:        KR
+admin-c:        IM12-KR
+tech-c:         IM12-KR
+status:         ALLOCATED PORTABLE
+mnt-by:         MNT-KRNIC-AP
+mnt-irt:        IRT-KRNIC-KR
+remarks:        This information has been partially mirrored by APNIC from
+remarks:        KRNIC. To obtain more specific information, please use the
+remarks:        KRNIC whois server at whois.kisa.or.kr.
+changed:        hostmaster@nic.or.kr
+source:         KRNIC
+
+person:         IP Manager
+address:        Seoul Jung-gu Toegye-ro 24
+address:        SK Namsan Green Bldg.
+country:        KR
+phone:          +82-80-828-2106
+e-mail:         ip-adm@skbroadband.com
+nic-hdl:        IM12-KR
+mnt-by:         MNT-KRNIC-AP
+changed:        hostmaster@nic.or.kr
+source:         KRNIC
+
+% This query was served by the APNIC Whois Service version 1.88.15-SNAPSHOT (WHOIS-US3)

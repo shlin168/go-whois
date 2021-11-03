@@ -1,0 +1,58 @@
+% This is the AfriNIC Whois server.
+% The AFRINIC whois database is subject to  the following terms of Use. See https://afrinic.net/whois/terms
+
+% Note: this output has been filtered.
+%       To receive output for a database update, use the "-B" flag.
+
+% Information related to '105.158.0.0 - 105.158.255.255'
+
+% No abuse contact registered for 105.158.0.0 - 105.158.255.255
+
+inetnum:        105.158.0.0 - 105.158.255.255
+netname:        ADSL_Maroc_telecom
+descr:          ADSL_Maroc_telecom
+country:        MA
+admin-c:        DMT1-AFRINIC
+tech-c:         SMT1-AFRINIC
+status:         ASSIGNED PA
+mnt-by:         ONPT-MNT
+source:         AFRINIC # Filtered
+parent:         105.128.0.0 - 105.159.255.255
+
+person:         DEMPFS Maroc Telecom
+address:        Division Exploitation et maintenance des PFS
+address:        MAROC TELECOM
+address:        Avenue de France AGDAL
+address:        Immeuble DR Rabat
+phone:          tel:+212-37686318
+nic-hdl:        DMT1-AFRINIC
+mnt-by:         GENERATED-59UQAQ1UAZKQWKK5GWNQRJ9VGMHDFDGD-MNT
+source:         AFRINIC # Filtered
+
+person:         SEPFS Maroc Telecom
+address:        Service Exploitation des PFS
+address:        MAROC TELECOM
+address:        Avenue Hay Annakhil Riad
+address:        rabat
+address:        Morocco
+phone:          tel:+212-37284314
+phone:          tel:+212-37284319
+nic-hdl:        SMT1-AFRINIC
+mnt-by:         GENERATED-QKJHRQGRJU8KJEZGF62S2JCUXLD0D81A-MNT
+source:         AFRINIC # Filtered
+
+% Information related to '105.128.0.0/11AS36903'
+
+route:          105.128.0.0/11
+descr:          route object
+origin:         AS36903
+mnt-by:         ONPT-MNT
+source:         AFRINIC # Filtered
+
+% Information related to '105.128.0.0/11AS6713'
+
+route:          105.128.0.0/11
+descr:          route object
+origin:         AS6713
+mnt-by:         ONPT-MNT
+source:         AFRINIC # Filtered

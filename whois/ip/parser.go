@@ -5,6 +5,9 @@ import (
 	"strings"
 
 	"github.com/sirupsen/logrus"
+
+	wd "github.com/shlin168/go-whois/whois/domain"
+	"github.com/shlin168/go-whois/whois/utils"
 )
 
 var DefaultIPKeyMap map[string]string = map[string]string{
@@ -14,6 +17,7 @@ var DefaultIPKeyMap map[string]string = map[string]string{
 	// type = route
 	"route":  "route/id",
 	"route6": "route/id",
+	"origin": "asn",
 	// type = irt
 	"mnt-irt": "mnt_irt",
 	"irt":     "irt/id",
@@ -41,6 +45,7 @@ var DefaultIPKeyMap map[string]string = map[string]string{
 	// whois.arin.net
 	"NetRange":       "inetnum",
 	"CIDR":           "range/cidr",
+	"OriginAS":       "asn",
 	"Comment":        "descr",
 	"OrgId":          "org/id",
 	"OrgName":        "name",
@@ -58,6 +63,15 @@ var DefaultIPKeyMap map[string]string = map[string]string{
 	"OrgAbusePhone":  "phone",
 	"OrgAbuseEmail":  "email",
 	"OrgAbuseRef":    "ref",
+	"OrgDNSHandle":   "org-dns/id",
+	"OrgDNSName":     "name",
+	"OrgDNSPhone":    "phone",
+	"OrgDNSEmail":    "email",
+	"OrgDNSRef":      "ref",
+	// whois.lacnic.net
+	"owner":      "org",
+	"aut-num":    "asn",
+	"inetnum-up": "parent",
 }
 
 var notFoundMsg = []string{
@@ -106,7 +120,7 @@ func (wp *Parser) Do(rawtext string, specKeyMaps ...map[string]string) (*ParsedW
 					}
 					ipn.convDate()
 					ns = append(ns, *ipn)
-				} else if _, ok := nmap["origin"]; ok {
+				} else if val, ok := nmap["type"]; ok && val == "route" {
 					// Routes
 					ipr, err := map2ParsedRoute(nmap)
 					if err != nil {
@@ -157,10 +171,15 @@ func (wp *Parser) Do(rawtext string, specKeyMaps ...map[string]string) (*ParsedW
 					nmap[key] = append(nmap[key].([]string), val)
 				case "inetnum":
 					nmap[key] = val
-					fromAndTo := strings.Split(val, "-")
-					nmap["range"] = map[string]interface{}{
-						"from": strings.TrimSpace(fromAndTo[0]),
-						"to":   strings.TrimSpace(fromAndTo[1]),
+					if fromAndTo := strings.Split(val, "-"); len(fromAndTo) == 2 {
+						nmap["range"] = map[string]interface{}{
+							"from": strings.TrimSpace(fromAndTo[0]),
+							"to":   strings.TrimSpace(fromAndTo[1]),
+						}
+					} else if strings.Contains(val, "/") {
+						nmap["range"] = map[string]interface{}{
+							"cidr": []string{val},
+						}
 					}
 				case "range/cidr":
 					var cidrs []string
@@ -174,6 +193,13 @@ func (wp *Parser) Do(rawtext string, specKeyMaps ...map[string]string) (*ParsedW
 						nmap["type"] = kv[0]
 					}
 					nmap[key] = val
+				case "changed":
+					// represents 'updated_date' in whois.lacnic.net
+					if _, ok := nmap["updated_date"]; !ok {
+						if _, err := utils.GuessTimeFmtAndConvert(val, wd.WhoisTimeFmt); err == nil {
+							nmap["updated_date"] = val
+						}
+					}
 				default:
 					nmap[key] = val
 				}

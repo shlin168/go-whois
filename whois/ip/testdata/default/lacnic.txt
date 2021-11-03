@@ -1,0 +1,44 @@
+% Joint Whois - whois.lacnic.net
+%  This server accepts single ASN, IPv4 or IPv6 queries
+
+% LACNIC resource: whois.lacnic.net
+
+
+% Copyright LACNIC lacnic.net
+%  The data below is provided for information purposes
+%  and to assist persons in obtaining information about or
+%  related to AS and IP numbers registrations
+%  By submitting a whois query, you agree to use this data
+%  only for lawful purposes.
+%  2021-11-03 09:52:08 (-03 -03:00)
+
+inetnum:     200.68.34.56/29
+status:      reallocated
+aut-num:     N/A
+owner:       Agencia de Aduanas Patricio Sesnich Stewart y Comp
+ownerid:     CL-AAPS3-LACNIC
+responsible: Operaciones ISP TIE
+address:     San Martin, 50, Piso 6
+address:     8340526 - Santiago - RM
+country:     CL
+phone:       +56 2 7701400
+owner-c:     OTE
+tech-c:      OTE
+abuse-c:     OTE
+created:     20100128
+changed:     20100128
+inetnum-up:  200.68.34.0/24
+
+nic-hdl:     OTE
+person:      Operaciones Telefonica Internet Empresas
+e-mail:      oper@isp.tie.cl
+address:     San Martin 50, Piso 5, 50,
+address:     02 - Santiago - RM
+country:     CL
+phone:       +56 02 6911620
+created:     20060215
+changed:     20060215
+
+% whois.lacnic.net accepts only direct match queries.
+% Types of queries are: POCs, ownerid, CIDR blocks, IP
+% and AS numbers.
