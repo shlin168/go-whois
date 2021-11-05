@@ -68,7 +68,14 @@ func New(cfg *ServerCfg, errLogger, acsLogger logrus.FieldLogger) (*Server, erro
 		return nil, err
 	}
 	// Realtime Whois - default query
-	s.cli = whois.NewClientInternal(cfg.whoisTimeout, whoisServer, errLogger)
+	s.cli, err = whois.NewClient(
+		whois.WithTimeout(cfg.whoisTimeout),
+		whois.WithServerMap(whoisServer),
+		whois.WithErrLogger(errLogger),
+	)
+	if err != nil {
+		return nil, err
+	}
 	return s, nil
 }
 

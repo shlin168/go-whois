@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -24,13 +23,15 @@ func TestQuery(t *testing.T) {
 	testWhoisPort, err := strconv.Atoi(whoisServerAddr[strings.LastIndex(whoisServerAddr, ":")+1:])
 	require.Nil(t, err)
 	testServerMap := DomainWhoisServerMap{}
-	client := NewClientWithServerMap(3*time.Second, testServerMap)
+	client, err := NewClient(WithTimeout(3*time.Second), WithServerMap(testServerMap))
+	require.Nil(t, err)
 	exp, err := client.Parse(TestDomain, NewRaw(TestDomainWhoisRawText, whoisServerHost))
 	require.Nil(t, err)
 
 	t.Run("QueryDomain", func(t *testing.T) {
 		testServerMap = DomainWhoisServerMap{"io": []WhoisServer{{Host: whoisServerHost}}}
-		client = NewClientWithServerMap(3*time.Second, testServerMap)
+		client, err = NewClient(WithTimeout(3*time.Second), WithServerMap(testServerMap))
+		require.Nil(t, err)
 		client.whoisPort = testWhoisPort
 		w, err := client.Query(context.Background(), TestDomain)
 		assert.Nil(t, err)
@@ -39,7 +40,8 @@ func TestQuery(t *testing.T) {
 
 	t.Run("QueryDomainSpecificWhoisServer", func(t *testing.T) {
 		testServerMap = DomainWhoisServerMap{}
-		client = NewClientWithServerMap(3*time.Second, testServerMap)
+		client, err = NewClient(WithTimeout(3*time.Second), WithServerMap(testServerMap))
+		require.Nil(t, err)
 		client.whoisPort = testWhoisPort
 		w, err := client.Query(context.Background(), TestDomain, whoisServerHost)
 		assert.Nil(t, err)
@@ -48,7 +50,8 @@ func TestQuery(t *testing.T) {
 
 	t.Run("QueryDomainAsync", func(t *testing.T) {
 		testServerMap = DomainWhoisServerMap{"io": []WhoisServer{{Host: whoisServerHost}}}
-		client = NewClientWithServerMap(3*time.Second, testServerMap)
+		client, err = NewClient(WithTimeout(3*time.Second), WithServerMap(testServerMap))
+		require.Nil(t, err)
 		client.whoisPort = testWhoisPort
 		status := &AsyncStatus{PublicSuffixs: []string{"github.io"}}
 		finishChan := client.QueryPublicSuffixsAsync(status)
@@ -60,7 +63,8 @@ func TestQuery(t *testing.T) {
 
 	t.Run("QueryDomainAsyncSpecificWhoisServer", func(t *testing.T) {
 		testServerMap = DomainWhoisServerMap{}
-		client = NewClientWithServerMap(3*time.Second, testServerMap)
+		client, err = NewClient(WithTimeout(3*time.Second), WithServerMap(testServerMap))
+		require.Nil(t, err)
 		client.whoisPort = testWhoisPort
 		status := &AsyncStatus{PublicSuffixs: []string{"github.io"}, WhoisServer: whoisServerHost}
 		finishChan := client.QueryPublicSuffixsAsync(status)
@@ -72,7 +76,8 @@ func TestQuery(t *testing.T) {
 
 	t.Run("QueryWhoisContainsNotFoundText", func(t *testing.T) {
 		testServerMap = DomainWhoisServerMap{"app": []WhoisServer{{Host: whoisServerHost}}}
-		client = NewClientWithServerMap(3*time.Second, testServerMap)
+		client, err = NewClient(WithTimeout(3*time.Second), WithServerMap(testServerMap))
+		require.Nil(t, err)
 		client.whoisPort = testWhoisPort
 		w, err := client.Query(context.Background(), TestNotFoundDomain)
 		assert.ErrorIs(t, ErrDomainIPNotFound, err)
@@ -82,7 +87,8 @@ func TestQuery(t *testing.T) {
 
 func TestQueryError(t *testing.T) {
 	testServerMap := DomainWhoisServerMap{}
-	client := NewClientWithServerMap(3*time.Second, testServerMap)
+	client, err := NewClient(WithTimeout(3*time.Second), WithServerMap(testServerMap))
+	require.Nil(t, err)
 
 	t.Run("PublicSuffixErr", func(t *testing.T) {
 		_, err := client.Query(context.Background(), "com")
@@ -98,8 +104,9 @@ func TestQueryError(t *testing.T) {
 
 	t.Run("QueryWhoisServerConnFailed", func(t *testing.T) {
 		serverMap := DomainWhoisServerMap{"aaa": []WhoisServer{{Host: "localhost"}}}
-		client := newClient(3*time.Second, "", "", 12345, serverMap, logrus.New())
-		_, err := client.Query(context.Background(), "aaa.aaa")
+		client, err := NewClient(WithTimeout(3*time.Second), WithServerMap(serverMap), WithIANA(":12345"))
+		require.Nil(t, err)
+		_, err = client.Query(context.Background(), "aaa.aaa")
 		assert.NotNil(t, err)
 		assert.Contains(t, err.Error(), "connection refused")
 	})
@@ -120,7 +127,8 @@ func TestQueryError(t *testing.T) {
 		require.Nil(t, err)
 
 		serverMap := DomainWhoisServerMap{"aaa": []WhoisServer{{Host: whoisServerHost}}}
-		client := NewClientWithServerMap(1*time.Second, serverMap)
+		client, err := NewClient(WithTimeout(1*time.Second), WithServerMap(serverMap))
+		require.Nil(t, err)
 		client.whoisPort = testWhoisPort
 		w, err := client.Query(context.Background(), "aaa.aaa")
 		assert.Nil(t, w)
@@ -129,7 +137,8 @@ func TestQueryError(t *testing.T) {
 
 	t.Run("QueryWhoisServerConnFailedAsync", func(t *testing.T) {
 		serverMap := DomainWhoisServerMap{"aaa": []WhoisServer{{Host: "localhost"}}}
-		client := newClient(3*time.Second, "", "", 12345, serverMap, logrus.New())
+		client, err := NewClient(WithTimeout(3*time.Second), WithServerMap(serverMap), WithIANA(":12345"))
+		require.Nil(t, err)
 		status := &AsyncStatus{PublicSuffixs: []string{"aaa.aaa"}}
 		finishChan := client.QueryPublicSuffixsAsync(status)
 		<-finishChan
@@ -165,7 +174,13 @@ func TestQueryIP(t *testing.T) {
 	defer arinServer.Close()
 	arinServerAddr := arinServer.Addr().String()
 	testServerMap := DomainWhoisServerMap{}
-	client := newClient(3*time.Second, "", arinServerAddr, testWhoisPort, testServerMap, logrus.New())
+	client, err := NewClient(
+		WithTimeout(3*time.Second),
+		WithARIN(arinServerAddr),
+		WithTestingWhoisPort(testWhoisPort),
+		WithServerMap(testServerMap),
+	)
+	require.Nil(t, err)
 	client.arinMap["test"] = whoisServerHost
 	exp, err := client.ParseIP(TestIP, NewRaw(TestIPWhoisRawText, whoisServerHost))
 	require.Nil(t, err)
@@ -177,14 +192,26 @@ func TestQueryIP(t *testing.T) {
 	})
 
 	t.Run("QueryIPSpecificWhoisServer", func(t *testing.T) {
-		client = newClient(3*time.Second, "", "", testWhoisPort, testServerMap, logrus.New())
+		client, err := NewClient(
+			WithTimeout(3*time.Second),
+			WithARIN(arinServerAddr),
+			WithTestingWhoisPort(testWhoisPort),
+			WithServerMap(testServerMap),
+		)
+		require.Nil(t, err)
 		w, err := client.QueryIP(context.Background(), TestIP, whoisServerHost)
 		assert.Nil(t, err)
 		assert.Empty(t, cmp.Diff(exp, w))
 	})
 
 	t.Run("QueryIPAsync", func(t *testing.T) {
-		client = newClient(3*time.Second, "", arinServerAddr, testWhoisPort, testServerMap, logrus.New())
+		client, err := NewClient(
+			WithTimeout(3*time.Second),
+			WithARIN(arinServerAddr),
+			WithTestingWhoisPort(testWhoisPort),
+			WithServerMap(testServerMap),
+		)
+		require.Nil(t, err)
 		client.arinMap["test"] = whoisServerHost
 		status := &AsyncStatus{DomainOrIP: TestIP}
 		finishChan := client.QueryIPAsync(status)
@@ -195,7 +222,12 @@ func TestQueryIP(t *testing.T) {
 	})
 
 	t.Run("QueryIPAsyncSpecificWhoisServer", func(t *testing.T) {
-		client = newClient(3*time.Second, "", "", testWhoisPort, testServerMap, logrus.New())
+		client, err := NewClient(
+			WithTimeout(3*time.Second),
+			WithTestingWhoisPort(testWhoisPort),
+			WithServerMap(testServerMap),
+		)
+		require.Nil(t, err)
 		status := &AsyncStatus{DomainOrIP: TestIP, WhoisServer: whoisServerHost}
 		finishChan := client.QueryIPAsync(status)
 		w := <-finishChan
@@ -205,7 +237,13 @@ func TestQueryIP(t *testing.T) {
 	})
 
 	t.Run("QueryIPWhoisContainsNotFoundText", func(t *testing.T) {
-		client = newClient(3*time.Second, "", arinServerAddr, testWhoisPort, testServerMap, logrus.New())
+		client, err := NewClient(
+			WithTimeout(3*time.Second),
+			WithARIN(arinServerAddr),
+			WithTestingWhoisPort(testWhoisPort),
+			WithServerMap(testServerMap),
+		)
+		require.Nil(t, err)
 		client.arinMap["test"] = whoisServerHost
 		w, err := client.QueryIP(context.Background(), TestNotFoundIP)
 		assert.ErrorIs(t, ErrDomainIPNotFound, err)
@@ -245,7 +283,13 @@ func TestQueryIPError(t *testing.T) {
 	arinServerAddr := arinServer.Addr().String()
 	arinServerHost := arinServerAddr[:strings.LastIndex(arinServerAddr, ":")]
 	testServerMap := DomainWhoisServerMap{}
-	client := newClient(3*time.Second, "", arinServerAddr, testWhoisPort, testServerMap, logrus.New())
+	client, err := NewClient(
+		WithTimeout(3*time.Second),
+		WithARIN(arinServerAddr),
+		WithTestingWhoisPort(testWhoisPort),
+		WithServerMap(testServerMap),
+	)
+	require.Nil(t, err)
 	client.arinMap["test"] = whoisServerHost
 
 	t.Run("NoOrgIdReturnARINresult", func(t *testing.T) {
@@ -256,7 +300,12 @@ func TestQueryIPError(t *testing.T) {
 
 	wrongArinServerAddr := arinServerHost + ":12345"
 	t.Run("QueryWhoisServerConnFailed", func(t *testing.T) {
-		client = newClient(3*time.Second, "", wrongArinServerAddr, 12345, testServerMap, logrus.New())
+		client, err := NewClient(
+			WithTimeout(3*time.Second),
+			WithARIN(wrongArinServerAddr),
+			WithServerMap(testServerMap),
+		)
+		require.Nil(t, err)
 		w, err := client.QueryIP(context.Background(), TestIP)
 		assert.Nil(t, w)
 		assert.NotNil(t, err)
@@ -264,14 +313,25 @@ func TestQueryIPError(t *testing.T) {
 	})
 
 	t.Run("QueryWhoisServerNotResp", func(t *testing.T) {
-		client = newClient(1*time.Second, "", arinServerAddr, testWhoisPort, testServerMap, logrus.New())
+		client, err := NewClient(
+			WithTimeout(1*time.Second),
+			WithARIN(arinServerAddr),
+			WithTestingWhoisPort(testWhoisPort),
+			WithServerMap(testServerMap),
+		)
+		require.Nil(t, err)
 		w, err := client.QueryIP(context.Background(), testIPnotResp)
 		assert.Nil(t, w)
 		assert.ErrorIs(t, err, ErrTimeout)
 	})
 
 	t.Run("QueryWhoisServerConnFailedAsync", func(t *testing.T) {
-		client = newClient(3*time.Second, "", wrongArinServerAddr, 12345, testServerMap, logrus.New())
+		client, err := NewClient(
+			WithTimeout(3*time.Second),
+			WithARIN(wrongArinServerAddr),
+			WithServerMap(testServerMap),
+		)
+		require.Nil(t, err)
 		status := &AsyncStatus{DomainOrIP: TestIP}
 		finishChan := client.QueryIPAsync(status)
 		<-finishChan

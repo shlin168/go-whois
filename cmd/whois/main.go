@@ -45,7 +45,14 @@ func main() {
 	}
 
 	logger := logrus.New()
-	dialer := whois.NewClientInternal(*timeout, dws, logger)
+	dialer, err := whois.NewClient(
+		whois.WithTimeout(*timeout),
+		whois.WithServerMap(dws),
+		whois.WithErrLogger(logger),
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
 	if !utils.IsIP(*domainOrIP) {
 		pslist, err := utils.GetPublicSuffixs(*domainOrIP)
 		if err != nil && len(pslist) == 0 {

@@ -29,19 +29,24 @@ const (
 	TypeDomain = "domain"
 	TypeIP     = "ip"
 
-	ianaWhoisServer = "whois.iana.org"
-	whoisPort       = 43
-
-	afrinicWhoisServer = "whois.afrinic.net"
-	apnicWhoisServer   = "whois.apnic.net"
-	arinWhoisServer    = "whois.arin.net"
-	lacnicWhoisServer  = "whois.lacnic.net"
-	ripeWhoisServer    = "whois.ripe.net"
+	DefaultIANAWhoisServer = "whois.iana.org"
+	DefaultWhoisPort       = 43
 )
 
 var (
-	readTimeout  = 1 * time.Second
-	writeTimeout = 1 * time.Second
+	DefaultReadTimeout  = 1 * time.Second
+	DefaultWriteTimeout = 1 * time.Second
+	DefaultTimeout      = 5 * time.Second
+
+	DefaultIPWhoisServerMap = map[string]string{
+		"APNIC":   "whois.apnic.net",
+		"ARIN":    "whois.arin.net",
+		"RIPE":    "whois.ripe.net",
+		"LACNIC":  "whois.lacnic.net",
+		"AFRINIC": "whois.afrinic.net",
+	}
+	DefaultIANA = FmtWhoisServer(DefaultIANAWhoisServer, DefaultWhoisPort)
+	DefaultARIN = FmtWhoisServer("whois.arin.net", DefaultWhoisPort)
 
 	// ErrDomainIPNotFound is fixed error message for WHOIS not found
 	ErrDomainIPNotFound = errors.New("domain/ip not found")
@@ -97,56 +102,100 @@ type Client struct {
 	logger       logrus.FieldLogger
 }
 
-// NewClient initializes whois client for library used
-func NewClient(timeout time.Duration) (*Client, error) {
-	serverMap, err := NewDomainWhoisServerMap(WhoisServerListURL)
+type ClientOpts func(*Client) error
+
+func WithTimeout(timeout time.Duration) ClientOpts {
+	return func(c *Client) error {
+		if timeout == 0 {
+			return fmt.Errorf("invalid timeout: %v", timeout)
+		}
+		c.timeout = timeout
+		return nil
+	}
+}
+
+func WithServerMap(serverMap DomainWhoisServerMap) ClientOpts {
+	return func(c *Client) error {
+		if serverMap == nil {
+			return errors.New("invalid server map")
+		}
+		c.whoisMap = serverMap
+		return nil
+	}
+}
+
+func WithIANA(ianaAddr string) ClientOpts {
+	return func(c *Client) error {
+		if strings.Index(ianaAddr, ":") == -1 {
+			return fmt.Errorf("ianaAddr should contains port, get: %s", ianaAddr)
+		}
+		c.ianaServAddr = ianaAddr
+		return nil
+	}
+}
+
+func WithARIN(arinAddr string) ClientOpts {
+	return func(c *Client) error {
+		if strings.Index(arinAddr, ":") == -1 {
+			return fmt.Errorf("arinAddr should contains port, get: %s", arinAddr)
+		}
+		c.arinServAddr = arinAddr
+		return nil
+	}
+}
+
+// WithTestingWhoisPort is expected to only use in testing since whois port is 43
+func WithTestingWhoisPort(port int) ClientOpts {
+	return func(c *Client) error {
+		c.whoisPort = port
+		return nil
+	}
+}
+
+func WithErrLogger(logger logrus.FieldLogger) ClientOpts {
+	return func(c *Client) error {
+		c.logger = logger
+		return nil
+	}
+}
+
+// NewClient initializes whois client with different options, if whois server map is not given
+// it will fetch from http://whois-server-list.github.io/whois-server-list/3.0/whois-server-list.xml
+func NewClient(opts ...ClientOpts) (*Client, error) {
+	client, err := newClient(opts...)
 	if err != nil {
 		return nil, err
 	}
-	return NewClientWithServerMap(timeout, serverMap), nil
+	if client.whoisMap == nil {
+		var err error
+		client.whoisMap, err = NewDomainWhoisServerMap(WhoisServerListURL)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return client, nil
 }
 
-// NewClientWithServerMap initializes whois client for library used
-func NewClientWithServerMap(timeout time.Duration, serverMap DomainWhoisServerMap) *Client {
-	return newClient(timeout, ianaWhoisServer, arinWhoisServer, whoisPort, serverMap, logrus.New())
-}
-
-// NewClientInternal initializes whois client for cmd and server
-func NewClientInternal(timeout time.Duration, serverMap DomainWhoisServerMap, logger logrus.FieldLogger) *Client {
-	return newClient(timeout, ianaWhoisServer, arinWhoisServer, whoisPort, serverMap, logger)
-}
-
-func newClient(timeout time.Duration, ianaServAddr, arinServAddr string, whoisPort int,
-	whoisMap DomainWhoisServerMap, logger logrus.FieldLogger) *Client {
+func newClient(opts ...ClientOpts) (*Client, error) {
 	c := &Client{
 		dialer:       &net.Dialer{},
-		ianaServAddr: ianaServAddr,
-		arinServAddr: arinServAddr,
-		arinMap: map[string]string{
-			"APNIC":   apnicWhoisServer,
-			"ARIN":    arinWhoisServer,
-			"RIPE":    ripeWhoisServer,
-			"LACNIC":  lacnicWhoisServer,
-			"AFRINIC": afrinicWhoisServer,
-		},
-		whoisMap:  whoisMap,
-		whoisPort: whoisPort,
-		timeout:   timeout,
-		wtimeout:  writeTimeout,
-		rtimeout:  readTimeout,
-		logger:    logger,
+		ianaServAddr: DefaultIANA,
+		arinServAddr: DefaultARIN,
+		arinMap:      DefaultIPWhoisServerMap,
+		whoisPort:    DefaultWhoisPort,
+		wtimeout:     DefaultWriteTimeout,
+		rtimeout:     DefaultReadTimeout,
+		timeout:      DefaultTimeout,
 	}
-	if strings.Index(c.ianaServAddr, ":") == -1 {
-		c.ianaServAddr = FmtWhoisServer(ianaServAddr, whoisPort)
+	for _, opt := range opts {
+		if err := opt(c); err != nil {
+			return nil, err
+		}
 	}
-	if strings.Index(c.arinServAddr, ":") == -1 {
-		c.arinServAddr = FmtWhoisServer(arinServAddr, whoisPort)
+	if c.logger == nil {
+		c.logger = logrus.New()
 	}
-	return c
-}
-
-func (c *Client) SetWhoisPort(port int) {
-	c.whoisPort = port
+	return c, nil
 }
 
 func (c *Client) getText(ctx context.Context, dst, domain string) (string, error) {

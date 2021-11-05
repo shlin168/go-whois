@@ -28,7 +28,9 @@ import (
 
 func main() {
     ctx := context.Background()
-    client, err := whois.NewClient(5*time.Second)  // timeout: 5s
+    // client default timeout: 5s,
+    // client with custom timeout: whois.NewClient(whois.WithTimeout(10*time.Second))
+    client, err := whois.NewClient()
     if err != nil {
         fmt.Println(err)
         os.Exit(1)
@@ -62,7 +64,7 @@ serverMap, err := whois.NewDomainWhoisServerMap(whois.WhoisServerListURL)
 if err != nil {
     ...
 }
-client := whois.NewClientWithServerMap(5*time.Second, serverMap)
+client := whois.NewClient(whois.WithServerMap(serverMap))
 ```
 
 ## Command Line Tool

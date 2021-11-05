@@ -55,8 +55,13 @@ func TestWhoisHandler(t *testing.T) {
 		"app": []whois.WhoisServer{{Host: whoisServerHost}},
 		"aaa": []whois.WhoisServer{{Host: whoisServerHost}},
 	}
-	client := whois.NewClientInternal(testTimeout, testServerMap, logger)
-	client.SetWhoisPort(testWhoisPort)
+	client, err := whois.NewClient(
+		whois.WithTimeout(testTimeout),
+		whois.WithServerMap(testServerMap),
+		whois.WithTestingWhoisPort(testWhoisPort),
+		whois.WithErrLogger(logger),
+	)
+	require.Nil(t, err)
 
 	// expected domain found result
 	expParsedWhois, err := client.Parse(whois.TestDomain, whois.NewRaw(whois.TestDomainWhoisRawText, whoisServerHost))
