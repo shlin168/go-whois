@@ -31,6 +31,9 @@ func (bew *BETLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
 	var regFlg bool
 	lines := strings.Split(rawtext, "\n")
 	for idx, line := range lines {
+		if IsCommentLine(line) {
+			continue
+		}
 		key, val, _ := getKeyValFromLine(line)
 		switch key {
 		case "Status":

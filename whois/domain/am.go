@@ -34,16 +34,10 @@ func (amw *AMTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
 	contactsMap := map[string]map[string]interface{}{}
 	lines := strings.Split(rawtext, "\n")
 	for idx, line := range lines {
-		line = strings.TrimSpace(line)
-		if strings.HasPrefix(line, "Status:") {
-			if _, val, err := getKeyValFromLine(line); err == nil {
-				parsedWhois.Statuses = []string{}
-				for _, status := range strings.Split(val, ",") {
-					parsedWhois.Statuses = append(parsedWhois.Statuses, strings.TrimSpace(status))
-				}
-				sort.Strings(parsedWhois.Statuses)
-			}
+		if IsCommentLine(line) {
+			continue
 		}
+		line = strings.TrimSpace(line)
 		switch keyword := strings.TrimRight(line, ":"); keyword {
 		case "DNS servers":
 			for i := 1; i <= maxNServer; i++ {

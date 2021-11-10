@@ -39,6 +39,9 @@ func (arw *ARTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
 	// contactsMap := map[string]map[string]interface{}{}
 	lines := strings.Split(rawtext, "\n")
 	for _, line := range lines {
+		if IsCommentLine(line) {
+			continue
+		}
 		key, val, err := getKeyValFromLine(line)
 		if err != nil {
 			continue

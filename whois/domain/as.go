@@ -53,7 +53,7 @@ func (asw *ASTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
 			}
 			sort.Strings(parsedWhois.NameServers)
 		case "Domain Status":
-			for i := 1; i <= 10; i++ {
+			for i := 1; i <= maxDStatus; i++ {
 				status := strings.TrimSpace(lines[idx+i])
 				if len(status) == 0 {
 					break

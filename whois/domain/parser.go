@@ -20,6 +20,7 @@ const (
 	BILLING    = "billing"
 
 	maxNServer = 20
+	maxDStatus = 10
 )
 
 var dayReplacer = strings.NewReplacer("st", "", "nd", "", "rd", "", "th", "")
@@ -66,6 +67,7 @@ var defaultKeyMap map[string]string = map[string]string{
 	"registrar iana id":                      "reg/iana_id",
 	"registrar":                              "reg/name",
 	"sponsoring registrar":                   "reg/name",
+	"registrar name":                         "reg/name",
 	"registrar abuse contact email":          "reg/abuse_contact_email",
 	"registrar abuse contact phone":          "reg/abuse_contact_phone",
 	"registrar url":                          "reg/url",
@@ -158,10 +160,16 @@ func NewTLDDomainParser(whoisServer string) ITLDParser {
 		return NewAMTLDParser() // am
 	case "whois.nic.as":
 		return NewASTLDParser() // as
+	case "whois.audns.net.au":
+		return NewAUTLDParser() // au
 	case "whois.dns.be":
 		return NewBETLDParser() // be
 	case "whois.nic.br":
 		return NewBRTLDParser() // br
+	case "whois.nic.cz":
+		return NewCZTLDParser() // cz
+	case "whois.eu":
+		return NewEUTLDParser() // eu
 	case "whois.nic.fr":
 		return NewFRTLDParser() // fr
 	case "whois.nic.it":
@@ -170,6 +178,8 @@ func NewTLDDomainParser(whoisServer string) ITLDParser {
 		return NewNLTLDParser() // nl
 	case "whois.dns.pl":
 		return NewPLTLDParser() // pl
+	case "whois.ripn.net":
+		return NewRUTLDParser() // ru
 	case "whois.sk-nic.sk":
 		return NewSKTLDParser() // sk
 	case "whois.dot.tk":
@@ -261,10 +271,17 @@ func (wb *Parser) Do(rawtext string, stopFunc func(string) bool, specKeyMaps ...
 		case "statuses":
 			// Trim link in status
 			// E.g., clientDeleteProhibited https://icann.org/epp#clientDeleteProhibited
-			ns := strings.Split(val, " ")[0]
 			if _, ok := wMap[keyName]; !ok {
 				wMap[keyName] = []string{}
 			}
+			// if contains ",", split by ","
+			if strings.Index(val, ",") != -1 {
+				for _, ns := range strings.Split(val, ",") {
+					wMap[keyName] = append(wMap[keyName].([]string), strings.TrimSpace(ns))
+				}
+				return
+			}
+			ns := strings.Split(val, " ")[0]
 			wMap[keyName] = append(wMap[keyName].([]string), ns)
 		case "name_servers":
 			if _, ok := wMap[keyName]; !ok {
@@ -285,6 +302,9 @@ func (wb *Parser) Do(rawtext string, stopFunc func(string) bool, specKeyMaps ...
 	// Parsing raw text line by line
 	for _, line := range strings.Split(rawtext, "\n") {
 		line = strings.TrimSpace(line)
+		if IsCommentLine(line) {
+			continue
+		}
 		if stopFunc != nil && stopFunc(line) {
 			break
 		}
@@ -382,4 +402,8 @@ func getKeyValFromLine(line string) (key, val string, err error) {
 		return line, "", errors.New("not valid line")
 	}
 	return strings.TrimSpace(kw[0]), strings.TrimSpace(kw[1]), nil
+}
+
+func IsCommentLine(line string) bool {
+	return strings.HasPrefix(line, "%") || strings.HasPrefix(line, "*")
 }

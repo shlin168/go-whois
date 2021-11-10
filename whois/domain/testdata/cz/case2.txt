@@ -1,0 +1,87 @@
+%  (c) 2006-2021 CZ.NIC, z.s.p.o.
+%
+% Intended use of supplied data and information
+%
+% Data contained in the domain name register, as well as information
+% supplied through public information services of CZ.NIC association,
+% are appointed only for purposes connected with Internet network
+% administration and operation, or for the purpose of legal or other
+% similar proceedings, in process as regards a matter connected
+% particularly with holding and using a concrete domain name.
+%
+% Full text available at:
+% http://www.nic.cz/page/306/intended-use-of-supplied-data-and-information/
+%
+% See also a search service at http://www.nic.cz/whois/
+%
+%
+% Whoisd Server Version: 3.12.2
+% Timestamp: Wed Nov 10 08:22:13 2021
+
+domain:       nyx.cz
+registrant:   SB:NYXCZ
+admin-c:      NYX
+nsset:        NSSID:IGNUM
+keyset:       IGN-K-NYXCZ
+registrar:    REG-IGNUM
+registered:   15.12.2000 23:21:00
+changed:      15.06.2021 20:41:04
+expire:       17.12.2025
+
+contact:      SB:NYXCZ
+name:         Marek Janda
+address:      Bozeticka 3396/8
+address:      Praha 4 - Modrany
+address:      143 00
+address:      CZ
+registrar:    REG-IGNUM
+created:      10.08.2001 22:13:00
+changed:      15.05.2018 21:32:00
+
+contact:      NYX
+name:         Marek Janda
+address:      Bozeticka 3396/8
+address:      Praha 4 - Modrany
+address:      143 00
+address:      CZ
+registrar:    REG-IGNUM
+created:      10.08.2001 22:13:00
+changed:      15.05.2018 21:32:00
+
+nsset:        NSSID:IGNUM
+nserver:      ns2.ignum.cz
+nserver:      ns1.ignum.com
+tech-c:       IGNUM-DOMENY
+registrar:    REG-IGNUM
+created:      20.09.2006 09:55:39
+changed:      13.12.2012 16:20:17
+
+contact:      IGNUM-DOMENY
+org:          Webglobe, s. r. o.
+name:         Lucie Vojtíková
+address:      Vinohradská 190
+address:      Praha 3
+address:      130 61
+address:      CZ
+e-mail:       jobot@ignum.cz
+registrar:    REG-IGNUM
+created:      13.12.2012 10:40:09
+changed:      14.05.2021 11:37:03
+
+keyset:       IGN-K-NYXCZ
+dnskey:       257 3 13 ak0Bv4Q8A7usVStSQZmzjCGaOFiechehkExO77kQ5ami1hJ9A1oqjmPd8DtUM9tJL14M9RF8f0mgUJv06r09lw==
+tech-c:       IGNUM
+registrar:    REG-IGNUM
+created:      15.06.2021 20:41:04
+changed:      17.06.2021 09:02:08
+
+contact:      IGNUM
+org:          Webglobe, s.r.o.
+name:         Lucie Vojtíková
+address:      Vinohradská 190
+address:      Praha 3
+address:      130 61
+address:      CZ
+registrar:    REG-IGNUM
+created:      17.03.2008 14:43:09
+changed:      04.08.2021 07:53:03

@@ -1,0 +1,46 @@
+Domain Name: PAKENHAMSC.VIC.EDU.AU
+Registry Domain ID: D407400000000925279-AU
+Registrar WHOIS Server: https://whois.auda.org.au
+Registrar URL: https://www.domainname.edu.au
+Last Modified: 2021-10-31T19:59:23Z
+Registrar Name: EDUCATION SERVICES AUSTRALIA LIMITED
+Registrar Abuse Contact Email: registrar@esa.edu.au
+Registrar Abuse Contact Phone: +61.399109829
+Reseller Name:
+Status: serverRenewProhibited https://afilias.com.au/get-au/whois-status-codes#serverRenewProhibited
+Status Reason: Not Currently Eligible For Renewal
+Registrant Contact ID: AT15-AU
+Registrant Contact Name: Alan Thwaites
+Tech Contact ID: AT15-AU
+Tech Contact Name: Alan Thwaites
+Name Server: NS3.IINETHOSTING.NET.AU
+Name Server IP: 203.113.244.121
+Name Server: NS1.IINETHOSTING.NET.AU
+Name Server IP: 202.59.108.10
+Name Server: NS2.IINETHOSTING.NET.AU
+Name Server IP: 202.59.108.11
+DNSSEC: unsigned
+Registrant: Alan Thwaites
+Eligibility Type: Government School
+
+>>> Last update of WHOIS database: 2021-11-10T07:23:11Z <<<
+
+
+
+Afilias Australia Pty Ltd (Afilias), for itself and on behalf of .au Domain Administration Limited (auDA), makes the WHOIS registration data directory service (WHOIS Service) available solely for the purposes of:
+
+(a) querying the availability of a domain name licence;
+
+(b) identifying the holder of a domain name licence; and/or
+
+(c) contacting the holder of a domain name licence in relation to that domain name and its use.
+
+The WHOIS Service must not be used for any other purpose (even if that purpose is lawful), including:
+
+(a) aggregating, collecting or compiling information from the WHOIS database, whether for personal or commercial purposes;
+
+(b) enabling the sending of unsolicited electronic communications; and / or
+
+(c) enabling high volume, automated, electronic processes that send queries or data to the systems of Afilias, any registrar, any domain name licence holder, or auDA.
+
+The WHOIS Service is provided for information purposes only. By using the WHOIS Service, you agree to be bound by these terms and conditions. The WHOIS Service is operated in accordance with the auDA WHOIS Policy (available at https://www.auda.org.au/policies/index-of-published-policies/2014/2014-07/ ).

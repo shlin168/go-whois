@@ -1,11 +1,11 @@
 package domain
 
 import (
-	"sort"
 	"strings"
 )
 
 var SKMap map[string]string = map[string]string{
+	"EPP Status":    "statuses",
 	"Email":         "reg/abuse_contact_email",
 	"Phone":         "reg/abuse_contact_phone",
 	"Registrant":    "c/registrant/id",
@@ -54,11 +54,6 @@ func (skw *SKTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
 			continue
 		}
 		switch key {
-		case "EPP Status":
-			for _, status := range strings.Split(val, ",") {
-				parsedWhois.Statuses = append(parsedWhois.Statuses, strings.TrimSpace(status))
-			}
-			sort.Strings(parsedWhois.Statuses)
 		case "Registrar":
 			if key, val, err := getKeyValFromLine(lines[idx+1]); err == nil && key == "Name" {
 				parsedWhois.Registrar.Name = val

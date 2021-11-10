@@ -37,6 +37,9 @@ func (brw *BRTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
 	var createDone, updateDone, expireDone bool
 	lines := strings.Split(rawtext, "\n")
 	for _, line := range lines {
+		if IsCommentLine(line) {
+			continue
+		}
 		if brw.stopFunc(line) {
 			break
 		}
