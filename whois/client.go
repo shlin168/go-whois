@@ -20,10 +20,11 @@ import (
 
 const (
 	// Values of RespType
-	RespTypeFound    = "found"
-	RespTypeNotFound = "not_found"
-	RespTypeError    = "error"
-	RespTypeTimeout  = "timeout"
+	RespTypeFound      = "found"
+	RespTypeNotFound   = "not_found"
+	RespTypeParseError = "parse_error"
+	RespTypeError      = "error"
+	RespTypeTimeout    = "timeout"
 
 	// Values of AccType
 	TypeDomain = "domain"
@@ -198,6 +199,13 @@ func newClient(opts ...ClientOpts) (*Client, error) {
 	return c, nil
 }
 
+func IsParsePanicErr(err error) bool {
+	if err == nil {
+		return false
+	}
+	return strings.HasPrefix(err.Error(), "parse error:")
+}
+
 func (c *Client) getText(ctx context.Context, dst, domain string) (string, error) {
 	conn, err := c.dialer.DialContext(ctx, "tcp", dst)
 	if err != nil {
@@ -273,7 +281,15 @@ func (c *Client) QueryPublicSuffix(ctx context.Context, ps string, whoisServer .
 	if wrt, err = c.QueryRaw(ctx, ps, whoisServer...); err != nil {
 		return nil, err
 	}
-	return c.Parse(ps, wrt)
+	w, err := c.Parse(ps, wrt)
+	if err != nil {
+		return w, err
+	}
+	// panic when parsing, w.ParsedWhois = nil
+	if IsParsePanicErr(err) {
+		return w, err
+	}
+	return w, nil
 }
 
 // QueryPublicSuffixs get whois information from given whois server or predefined whois server map with public suffix list
@@ -310,11 +326,15 @@ func (c *Client) QueryPublicSuffixs(ctx context.Context, pslist []string, whoisS
 	if err != nil {
 		return w, err
 	}
-	if isAvail != nil {
-		if w.IsAvailable = isAvail; *w.IsAvailable {
-			// is available = WHOIS not found
-			return w, ErrDomainIPNotFound
-		}
+	w.IsAvailable = isAvail
+
+	// panic when parsing, w.ParsedWhois = nil
+	if IsParsePanicErr(err) {
+		return w, err
+	}
+	// is available = WHOIS not found
+	if w.IsAvailable != nil && *w.IsAvailable {
+		return w, ErrDomainIPNotFound
 	}
 	if wd.WhoisNotFound(w.RawText) {
 		return w, ErrDomainIPNotFound
@@ -323,16 +343,28 @@ func (c *Client) QueryPublicSuffixs(ctx context.Context, pslist []string, whoisS
 }
 
 // Parse get parser based on TLD and use it to parse rawtext. Also check if rawtext contains **not found** keywords
-func (c *Client) Parse(ps string, wrt *Raw) (*wd.Whois, error) {
+func (c *Client) Parse(ps string, wrt *Raw) (pw *wd.Whois, err error) {
 	tld := utils.GetTLD(ps)
 	parser := wd.NewTLDDomainParser(wrt.Server)
+	defer func() {
+		if panicErr := recover(); panicErr != nil {
+			c.logger.WithFields(
+				logrus.Fields{"ps": ps, "tld": tld, "parser": parser.GetName()},
+			).Warnf("panic when parsing raw text: %v", panicErr)
+			// still return rawtext and server when parsing failed
+			pw = wd.NewWhois(nil, wrt.Rawtext, wrt.Server)
+			err = fmt.Errorf("parse error: %s", panicErr.(string))
+		}
+	}()
 	c.logger.WithFields(logrus.Fields{"tld": tld, "parser": parser.GetName()}).Info("parse")
 
+	// Log for panic to avoid crashing server
 	parsedWhois, err := parser.GetParsedWhois(wrt.Rawtext)
 	if err != nil {
 		return nil, err
 	}
-	return wd.NewWhois(parsedWhois, wrt.Rawtext, wrt.Server), nil
+	pw = wd.NewWhois(parsedWhois, wrt.Rawtext, wrt.Server)
+	return pw, nil
 }
 
 // QueryPublicSuffixsAsync performs async query and returns channel for caller to wait for the result
@@ -345,6 +377,11 @@ func (c *Client) QueryPublicSuffixsAsync(status *AsyncStatus) chan *wd.Whois {
 			if errors.Is(err, ErrDomainIPNotFound) {
 				// get whois value while raw text contains keyword that represent WHOIS not found
 				status.RespType = RespTypeNotFound
+				result <- whoisStruct
+				return
+			}
+			if IsParsePanicErr(err) {
+				status.RespType = RespTypeParseError
 				result <- whoisStruct
 				return
 			}
@@ -373,17 +410,26 @@ func (c *Client) QueryIPRaw(ctx context.Context, ip, whoisServer string) (*Raw, 
 }
 
 // ParseIP get parser and parse rawtext
-func (c *Client) ParseIP(ip string, wrt *Raw) (*wip.Whois, error) {
+func (c *Client) ParseIP(ip string, wrt *Raw) (pip *wip.Whois, err error) {
 	parser := wip.NewParser(ip, c.logger)
+	defer func() {
+		if panicErr := recover(); panicErr != nil {
+			c.logger.WithField("ip", ip).Warnf("panic when parsing raw text: %v", panicErr)
+			// still return rawtext and server when parsing failed
+			pip = wip.NewWhois(nil, wrt.Rawtext, wrt.Server)
+			err = fmt.Errorf("parse error: %s", panicErr.(string))
+		}
+	}()
+	// Log for panic to avoid crashing server
 	parsedWhois, err := parser.Do(wrt.Rawtext)
 	if err != nil {
 		return nil, err
 	}
-	w := wip.NewWhois(parsedWhois, wrt.Rawtext, wrt.Server)
+	pip = wip.NewWhois(parsedWhois, wrt.Rawtext, wrt.Server)
 	if wip.WhoisNotFound(wrt.Rawtext) {
-		return w, ErrDomainIPNotFound
+		return pip, ErrDomainIPNotFound
 	}
-	return w, nil
+	return pip, nil
 }
 
 // QueryIP get whois information from given whois server or query 'whois.arin.net' and parse 'OrgId'
@@ -422,7 +468,18 @@ func (c *Client) QueryIP(ctx context.Context, ip string, whoisServers ...string)
 			wrt = NewRaw(rawtext, c.arinServAddr[:strings.Index(c.arinServAddr, ":")])
 		}
 	}
-	return c.ParseIP(ip, wrt)
+	pip, err := c.ParseIP(ip, wrt)
+	// panic when parsing, pip.ParsedWhois = nil
+	if IsParsePanicErr(err) {
+		return pip, err
+	}
+	if wip.WhoisNotFound(wrt.Rawtext) {
+		return pip, ErrDomainIPNotFound
+	}
+	if err != nil {
+		return nil, err
+	}
+	return pip, nil
 }
 
 // QueryIPAsync performs async query and returns channel for caller to wait for the result
@@ -435,6 +492,11 @@ func (c *Client) QueryIPAsync(status *AsyncStatus) chan *wip.Whois {
 			if errors.Is(err, ErrDomainIPNotFound) {
 				// get whois value while raw text contains keyword that represent WHOIS not found
 				status.RespType = RespTypeNotFound
+				result <- whoisStruct
+				return
+			}
+			if IsParsePanicErr(err) {
+				status.RespType = RespTypeParseError
 				result <- whoisStruct
 				return
 			}

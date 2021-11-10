@@ -54,6 +54,7 @@ type WhoisResp struct {
 	Notes struct {
 		OriginalQuery string   `json:"query"`
 		PublicSuffixs []string `json:"public_suffixs,omitempty"`
+		Error         string   `json:"error,omitempty"`
 	} `json:"notes"`
 	IP          []IP   `json:"ip,omitempty"`
 	QueriedDate string `json:"queried_date"`
@@ -65,6 +66,7 @@ type WhoisIPResp struct {
 	Type  string     `json:"type"`
 	Notes struct {
 		OriginalQuery string `json:"query"`
+		Error         string `json:"error,omitempty"`
 	} `json:"notes"`
 	QueriedDate string `json:"queried_date"`
 }
@@ -110,12 +112,12 @@ func WhoisHandler(cli *whois.Client, resolver *Resolver, acsLogger logrus.FieldL
 			result := cli.QueryIPAsync(status)
 			asyncResp := <-result
 			respBy = respByRT
-			if status.Err != nil && status.RespType != whois.RespTypeNotFound {
+			if status.Err != nil {
 				switch status.RespType {
 				case whois.RespTypeTimeout:
 					http.Error(resp, status.Err.Error(), http.StatusRequestTimeout)
 					return
-				default:
+				case whois.RespTypeError:
 					http.Error(resp, status.Err.Error(), http.StatusInternalServerError)
 					return
 				}
@@ -129,6 +131,9 @@ func WhoisHandler(cli *whois.Client, resolver *Resolver, acsLogger logrus.FieldL
 				resp.WriteHeader(http.StatusNotFound)
 				json.NewEncoder(resp).Encode(wResp)
 				return
+			}
+			if status.RespType == whois.RespTypeParseError {
+				wResp.Notes.Error = status.Err.Error()
 			}
 			resp.WriteHeader(http.StatusOK)
 			json.NewEncoder(resp).Encode(wResp)
@@ -153,12 +158,12 @@ func WhoisHandler(cli *whois.Client, resolver *Resolver, acsLogger logrus.FieldL
 		result := cli.QueryPublicSuffixsAsync(status)
 		asyncResp := <-result
 		respBy = respByRT
-		if status.Err != nil && status.RespType != whois.RespTypeNotFound {
+		if status.Err != nil {
 			switch status.RespType {
 			case whois.RespTypeTimeout:
 				http.Error(resp, status.Err.Error(), http.StatusRequestTimeout)
 				return
-			default:
+			case whois.RespTypeError:
 				http.Error(resp, status.Err.Error(), http.StatusInternalServerError)
 				return
 			}
@@ -185,6 +190,9 @@ func WhoisHandler(cli *whois.Client, resolver *Resolver, acsLogger logrus.FieldL
 			} else {
 				IncrIPLookupMetrics(ipLookupFound)
 			}
+		}
+		if status.RespType == whois.RespTypeParseError {
+			wResp.Notes.Error = status.Err.Error()
 		}
 		resp.Header().Set("Content-Type", "application/json")
 		resp.WriteHeader(http.StatusOK)
