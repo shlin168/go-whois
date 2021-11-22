@@ -14,6 +14,7 @@ const (
 	missingPort = "missing port in address"
 )
 
+// GetHost fetch host from "<host>:<port>" string, and return input string if it does not contain port
 func GetHost(domain string) (string, error) {
 	host, _, err := net.SplitHostPort(domain)
 	if err != nil {
@@ -74,6 +75,11 @@ func GetPublicSuffixs(domain string) ([]string, error) {
 	return publicSuffixs, err
 }
 
+// return string after first ".", and return input string if it does not contains "."
+// E.g,
+// 	GetTLD("aaa.aaa") = "aaa"
+// 	GetTLD("pooch.co.uk") = "co.uk"
+// 	GetTLD("com") = "com"
 func GetTLD(ps string) string {
 	if tldlist := strings.SplitN(ps, ".", 2); len(tldlist) == 2 {
 		return tldlist[1]
@@ -101,6 +107,7 @@ func IsIP(host string) bool {
 	}
 }
 
+// IsTimeout return whether an error is classified as **timeout** error
 func IsTimeout(err error) bool {
 	err = errors.Unwrap(err)
 	if err, ok := err.(net.Error); (ok && err.Timeout()) || os.IsTimeout(err) {

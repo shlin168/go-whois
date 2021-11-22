@@ -332,10 +332,10 @@ func (c *Client) QueryPublicSuffixs(ctx context.Context, pslist []string, whoisS
 	if IsParsePanicErr(err) {
 		return w, err
 	}
-	// is available = WHOIS not found
-	if w.IsAvailable != nil && *w.IsAvailable {
-		return w, ErrDomainIPNotFound
-	}
+	/* Not return error since availablePattern in whois server list xml file is not always correct... */
+	// if w.IsAvailable != nil && *w.IsAvailable {
+	// 	return w, ErrDomainIPNotFound
+	// }
 	if wd.WhoisNotFound(w.RawText) {
 		return w, ErrDomainIPNotFound
 	}

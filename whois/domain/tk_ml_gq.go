@@ -5,36 +5,36 @@ import (
 	"strings"
 )
 
-var TKMap = map[string]string{
+var TKMLGQMap = map[string]string{
 	"Domain registered":     "created_date",
 	"Record will expire on": "expired_date",
 }
 
-var tkContactKeyMap = map[string]string{
+var tkmlgqContactKeyMap = map[string]string{
 	"zipcode": "postal",
 	"e-mail":  "email",
 	"address": "street",
 }
 
-type TKParser struct{}
+type TKMLGQParser struct{}
 
-type TKTLDParser struct {
+type TKMLGQTLDParser struct {
 	parser   IParser
 	stopFunc func(string) bool
 }
 
-func NewTKTLDParser() *TKTLDParser {
-	return &TKTLDParser{
+func NewTKMLGQTLDParser() *TKMLGQTLDParser {
+	return &TKMLGQTLDParser{
 		parser: NewParser(),
 	}
 }
 
-func (tkw *TKTLDParser) GetName() string {
-	return "tk"
+func (tkmlgqw *TKMLGQTLDParser) GetName() string {
+	return "tk/ml/gq"
 }
 
-func (tkw *TKTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
-	parsedWhois, err := tkw.parser.Do(rawtext, nil, TKMap)
+func (tkmlgqw *TKMLGQTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
+	parsedWhois, err := tkmlgqw.parser.Do(rawtext, nil, TKMLGQMap)
 	if err != nil {
 		return nil, err
 	}
@@ -76,7 +76,7 @@ func (tkw *TKTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
 				continue
 			}
 			lckey := strings.ToLower(key)
-			ckey, ok := tkContactKeyMap[lckey]
+			ckey, ok := tkmlgqContactKeyMap[lckey]
 			if !ok {
 				ckey = lckey
 			}

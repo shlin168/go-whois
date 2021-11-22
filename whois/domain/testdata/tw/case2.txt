@@ -1,0 +1,33 @@
+Domain Name: taiwanlands.com.tw
+   Domain Status: clientRenewProhibited,clientUpdateProhibited,clientDeleteProhibited,clientTransferProhibited
+   Registrant:
+
+      Han Yuan \u5f35
+      Han Yuan \u5f35  hanyuan109@gmail.com
+      +886.0973109109
+
+      Zhong Shan Lu 563\u865f13\u6a13
+      Lin Kou \u5340, Xin Bei Shi
+      TW
+
+   Administrative Contact:
+      Han Yuan \u5f35  hanyuan109@gmail.com
+      +886.0973109109
+
+
+   Technical Contact:
+      Han Yuan \u5f35  hanyuan109@gmail.com
+      +886.0973109109
+
+
+   Record expires on 2022-06-25 00:25:53 (UTC+8)
+   Record created on 2021-06-25 00:25:53 (UTC+8)
+
+   Domain servers in listed order:
+      ns47.cx901.com
+      ns48.cx901.com
+
+Registration Service Provider: GoDaddy
+Registration Service URL: http://www.GoDaddy.com/
+
+Provided by Registry Services, LLC. Registry Gateway Services

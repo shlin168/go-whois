@@ -182,8 +182,10 @@ func NewTLDDomainParser(whoisServer string) ITLDParser {
 		return NewRUTLDParser() // ru
 	case "whois.sk-nic.sk":
 		return NewSKTLDParser() // sk
-	case "whois.dot.tk":
-		return NewTKTLDParser() // tk
+	case "whois.dot.tk", "whois.dot.ml", "whois.dominio.gq":
+		return NewTKMLGQTLDParser() // gq, ml, tk
+	case "whois.twnic.net", "whois.twnic.net.tw":
+		return NewTWTLDParser() // tw
 	case "whois.nic.uk", "whois.ja.net":
 		return NewUKTLDParser() // uk
 	case "whois.ua", "whois.net.ua", "whois.in.ua":

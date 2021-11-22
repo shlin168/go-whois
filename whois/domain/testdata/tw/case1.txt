@@ -1,0 +1,22 @@
+Domain Name: youngtube.tw
+   Domain Status: clientTransferProhibited
+   Registrant:
+      Rochefort Denis  dzwalker@protonmail.com
+
+   Administrative Contact:
+      Rochefort Denis  dzwalker@protonmail.com
+
+   Technical Contact:
+      Rochefort Denis  dzwalker@protonmail.com
+
+   Record expires on 2022-04-19 10:54:59 (UTC+8)
+   Record created on 2021-04-19 10:54:59 (UTC+8)
+
+   Domain servers in listed order:
+      keenan.ns.cloudflare.com
+      maisie.ns.cloudflare.com
+
+Registration Service Provider: 101 Domain Inc.
+Registration Service URL: http://www.101domain.com/
+
+Provided by Registry Services, LLC. Registry Gateway Services

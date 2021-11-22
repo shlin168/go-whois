@@ -4,10 +4,6 @@ import (
 	"strings"
 )
 
-var itContactKeyMap = map[string]string{
-	"address": "street",
-}
-
 func itMapContactKeyValue(key string) string {
 	if key == "Address" {
 		return "street"

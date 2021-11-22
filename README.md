@@ -139,6 +139,7 @@ Query from sepecified whois server
 #### HTTP Response Code
   * `200`: found
   * `404`: not found, which means response rawtext contains keywords that are regard as WHOIS not found
+      * Method: Try to fetch keywords([domain](./whois/domain/parser.go#L127)/[ip](./whois/ip/parser.go#L77)) in rawtext
   * `400`: invalid input, wrong request format or error when getting public suffixs for domain
   * `408`: whois server not response after `N`(timeout, default `5s`) seconds
   * `500`: internal error
