@@ -1,0 +1,31 @@
+% This is the IRNIC Whois server v1.6.2.
+% Available on web at http://whois.nic.ir/
+% Find the terms and conditions of use on http://www.nic.ir/
+%
+% This server uses UTF-8 as the encoding for requests and responses.
+
+% NOTE: This output has been filtered.
+
+% Information related to 'htest.ir'
+
+
+domain: htest.ir
+ascii: htest.ir
+remarks: (Domain Holder) Noavaran Shabake Sabz Mehregan (HostIran Networks)
+remarks: (Domain Holder Address) No. 13, Peymani Alley, Miremad St, Motahari St., Tehran, Tehran, IR
+holder-c: no297-irnic
+admin-c: no297-irnic
+tech-c: no297-irnic
+nserver: ns1.hostiran.net
+nserver: ns2.hostiran.net
+last-updated: 2020-12-23
+expire-date: 2026-01-03
+source: IRNIC # Filtered
+
+nic-hdl: no297-irnic
+org: Noavaran Shabake Sabz Mehregan (HostIran Networks)
+e-mail: esmailian@hostiran.com
+address: No. 13, Peymani Alley, Miremad St, Motahari St., Tehran, Tehran, IR
+phone: +982128310
+fax-no: +982128310
+source: IRNIC # Filtered

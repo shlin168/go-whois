@@ -1,0 +1,46 @@
+% Copyright (c)2021 by NIC.AT (3)
+%
+% Restricted rights.
+%
+% Except  for  agreed Internet  operational  purposes, no  part  of this
+% information  may  be reproduced,  stored  in  a  retrieval  system, or
+% transmitted, in  any  form  or by  any means,  electronic, mechanical,
+% recording, or otherwise, without prior  permission of NIC.AT on behalf
+% of itself and/or the copyright  holders.  Any use of this  material to
+% target advertising  or similar activities is explicitly  forbidden and
+% can be prosecuted.
+%
+% It is furthermore strictly forbidden to use the Whois-Database in such
+% a  way  that  jeopardizes or  could jeopardize  the  stability  of the
+% technical  systems of  NIC.AT  under any circumstances. In particular,
+% this includes  any misuse  of the  Whois-Database and  any  use of the
+% Whois-Database which disturbs its operation.
+%
+% Should the  user violate  these points,  NIC.AT reserves  the right to
+% deactivate  the  Whois-Database   entirely  or  partly  for  the user.
+% Moreover,  the  user  shall be  held liable  for  any  and all  damage
+% arising from a violation of these points.
+
+domain:         reitpaedagogin.at
+registrar:      Emerion WebHosting GmbH ( https://nic.at/registrar/13 )
+registrant:     <data not disclosed>
+tech-c:         DA704621-NICAT
+nserver:        ns1.emerion.com
+remarks:        212.69.178.21
+nserver:        ns2.emerion.com
+remarks:        37.235.1.59
+changed:        20160402 09:36:26
+source:         AT-DOM
+
+personname:     emerion Domain Admin
+organization:   emerion WebHosting GmbH
+street address: Hofmuehlgasse 3
+postal code:    1060
+city:           Wien
+country:        Austria
+phone:          +4312988800
+fax-no:         +4318774888
+e-mail:         domain-admin@emerion.com
+nic-hdl:        DA704621-NICAT
+changed:        20190327 18:59:04
+source:         AT-DOM

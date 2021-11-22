@@ -1,0 +1,49 @@
+% Copyright (c)2021 by NIC.AT (3)
+%
+% Restricted rights.
+%
+% Except  for  agreed Internet  operational  purposes, no  part  of this
+% information  may  be reproduced,  stored  in  a  retrieval  system, or
+% transmitted, in  any  form  or by  any means,  electronic, mechanical,
+% recording, or otherwise, without prior  permission of NIC.AT on behalf
+% of itself and/or the copyright  holders.  Any use of this  material to
+% target advertising  or similar activities is explicitly  forbidden and
+% can be prosecuted.
+%
+% It is furthermore strictly forbidden to use the Whois-Database in such
+% a  way  that  jeopardizes or  could jeopardize  the  stability  of the
+% technical  systems of  NIC.AT  under any circumstances. In particular,
+% this includes  any misuse  of the  Whois-Database and  any  use of the
+% Whois-Database which disturbs its operation.
+%
+% Should the  user violate  these points,  NIC.AT reserves  the right to
+% deactivate  the  Whois-Database   entirely  or  partly  for  the user.
+% Moreover,  the  user  shall be  held liable  for  any  and all  damage
+% arising from a violation of these points.
+
+domain:         aws.at
+registrar:      baddaboom IT Service GmbH ( https://nic.at/registrar/633 )
+registrant:     AWGM8135925-NICAT
+tech-c:         AWGM8135925-NICAT
+tech-c:         <data not disclosed>
+nserver:        ns1.awsg.at
+remarks:        91.198.45.4
+nserver:        nsa.baddaboom.at
+remarks:        86.59.84.25
+nserver:        nsb.baddaboom.at
+remarks:        184.106.204.52
+changed:        20150910 15:12:57
+source:         AT-DOM
+
+personname:
+organization:   Austria Wirtschaftsservice Gesellschaft m.b.H
+street address: Walcherstrasse 11a
+postal code:    1020
+city:           Wien
+country:        Austria
+phone:          +43150175
+fax-no:         +43150175900
+e-mail:         dnsadmin@awsg.at
+nic-hdl:        AWGM8135925-NICAT
+changed:        20131119 14:47:15
+source:         AT-DOM

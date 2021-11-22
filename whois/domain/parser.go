@@ -160,6 +160,8 @@ func NewTLDDomainParser(whoisServer string) ITLDParser {
 		return NewAMTLDParser() // am
 	case "whois.nic.as":
 		return NewASTLDParser() // as
+	case "whois.nic.at":
+		return NewATTLDParser() // at
 	case "whois.audns.net.au":
 		return NewAUTLDParser() // au
 	case "whois.dns.be":
@@ -172,6 +174,8 @@ func NewTLDDomainParser(whoisServer string) ITLDParser {
 		return NewEUTLDParser() // eu
 	case "whois.nic.fr":
 		return NewFRTLDParser() // fr
+	case "whois.nic.ir":
+		return NewIRTLDParser() // ir
 	case "whois.nic.it":
 		return NewITTLDParser() // it
 	case "whois.domain-registry.nl":
