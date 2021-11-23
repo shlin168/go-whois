@@ -70,10 +70,7 @@ func (uaw *UATLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
 			if len(contactFlg) == 0 {
 				continue
 			}
-			ckey, ok := uaContactKeyMap[key]
-			if !ok {
-				ckey = key
-			}
+			ckey := mapContactKeys(uaContactKeyMap, key)
 			if ckey == "street" {
 				if _, ok := contactsMap[contactFlg][ckey]; !ok {
 					contactsMap[contactFlg][ckey] = []string{}

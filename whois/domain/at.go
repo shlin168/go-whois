@@ -23,13 +23,6 @@ var atContactKeyMap = map[string]string{
 	"fax-no":         "fax",
 }
 
-func mapATContactKey(key string) string {
-	if val, ok := atContactKeyMap[key]; ok {
-		return val
-	}
-	return key
-}
-
 type ATTLDParser struct {
 	parser   IParser
 	stopFunc func(string) bool
@@ -96,7 +89,7 @@ func (atw *ATTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, error) {
 			if key == "personname" {
 				tmpContact = make(map[string]interface{})
 			}
-			ckey := mapATContactKey(key)
+			ckey := mapContactKeys(atContactKeyMap, key)
 			if ckey == "street" {
 				if _, ok := tmpContact[ckey]; !ok {
 					tmpContact[ckey] = []string{}

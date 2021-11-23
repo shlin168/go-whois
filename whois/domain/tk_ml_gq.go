@@ -75,11 +75,7 @@ func (tkmlgqw *TKMLGQTLDParser) GetParsedWhois(rawtext string) (*ParsedWhois, er
 			if len(contactFlg) == 0 {
 				continue
 			}
-			lckey := strings.ToLower(key)
-			ckey, ok := tkmlgqContactKeyMap[lckey]
-			if !ok {
-				ckey = lckey
-			}
+			ckey := mapContactKeys(tkmlgqContactKeyMap, strings.ToLower(key))
 			if ckey == "street" {
 				if _, ok := contactsMap[contactFlg][ckey]; !ok {
 					contactsMap[contactFlg][ckey] = []string{}

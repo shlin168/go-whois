@@ -377,6 +377,13 @@ func map2ParsedContacts(cMap map[string]map[string]interface{}) (*Contacts, erro
 	return &w, nil
 }
 
+func mapContactKeys(cKeyMap map[string]string, key string) string {
+	if val, ok := cKeyMap[key]; ok {
+		return val
+	}
+	return key
+}
+
 // FoundByKey return value of key from rawtext
 // 		FoundByKey("whois server", "whois server: whois.nic.aaa") = whois.nic.aaa
 func FoundByKey(key, rawtext string) string {
