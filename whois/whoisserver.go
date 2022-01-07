@@ -134,16 +134,28 @@ func NewDomainWhoisServerMap(xmlpath string) (DomainWhoisServerMap, error) {
 	if err == nil {
 		DomainWhoisServerMap["mc"][0].AvailPtn = ptn
 	}
-	// wrong whois server in whois-server-list.xml
+	// wrong or unavailable first whois server in whois-server-list.xml
 	// ai: whois.ai -> whois.nic.ai
 	DomainWhoisServerMap["ai"] = []WhoisServer{{Host: "whois.nic.ai"}}
+	// cyou: whois.afilias-srs.net -> whois.nic.cyou
+	DomainWhoisServerMap["cyou"] = []WhoisServer{{Host: "whois.nic.cyou"}}
+	// live: whois.rightside.co -> whois.nic.live
+	DomainWhoisServerMap["live"] = []WhoisServer{{Host: "whois.nic.live"}}
+	// vg: ccwhois.ksregistry.net -> whois.nic.vg
+	DomainWhoisServerMap["vg"] = []WhoisServer{{Host: "whois.nic.vg"}}
+	// live: whois-dub.mm-registry.com -> whois.nic.live
+	DomainWhoisServerMap["surf"] = []WhoisServer{{Host: "whois.nic.surf"}}
 
 	// Not available server
 	// in: whois.inregistry.in -> whois.registry.in
-	//DomainWhoisServerMap["in"] = []WhoisServer{{Host: "whois.registry.in"}}
+	// pt: whois.dns.pt -> whois.ripe.net (while seems that this server return 'no entries found' for every domain?)
+	DomainWhoisServerMap["pt"] = []WhoisServer{{Host: "whois.ripe.net"}}
 	for k, v := range DomainWhoisServerMap {
 		if len(v) > 0 && v[0].Host == "whois.inregistry.in" {
 			DomainWhoisServerMap[k] = []WhoisServer{{Host: "whois.registry.in"}}
+		}
+		if len(v) > 0 && v[0].Host == "whois.dns.pt" {
+			DomainWhoisServerMap[k] = []WhoisServer{{Host: "whois.ripe.net"}}
 		}
 	}
 
