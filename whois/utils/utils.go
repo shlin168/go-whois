@@ -40,7 +40,7 @@ func GetHost(domain string) (string, error) {
 // no matter it's ICANN-managed domain or not
 // E.g. "co.uk", "jpn.com", "net.ua" -> true
 // E.g. "github.io", "zhitomir.ua" -> false
-func ForceQueryThreeLevel(ps string) bool {
+func ForceQueryPSPlusOne(ps string) bool {
 	for _, tlditem := range strings.Split(ps, ".") {
 		if len(tlditem) > 3 {
 			return false
@@ -49,28 +49,48 @@ func ForceQueryThreeLevel(ps string) bool {
 	return true
 }
 
+// GetDescentLevel get n-1 level of ps
+// E.g., "abc.co.com" -> "co.com"
+func GetDescentLevel(ps string) string {
+	firstIdx := strings.Index(ps, ".")
+	return ps[firstIdx+1:]
+}
+
 // GetPublicSuffixs returns public suffixs of input domain
 func GetPublicSuffixs(domain string) ([]string, error) {
 	// return publicsuffix + 1 and publicsuffix, remove items if length of tld is less than 2
 	var publicSuffixs []string
+	var minLevel int
 	publicSuffixPlusOne, err := publicsuffix.EffectiveTLDPlusOne(domain)
 	if err == nil {
 		publicSuffixs = append(publicSuffixs, publicSuffixPlusOne)
 	}
 	publicSuffix, icann := publicsuffix.PublicSuffix(domain)
+	minLevel = strings.Count(publicSuffix, ".") + 1
 	if !icann {
 		// unmanaged top-level domain, return publicsuffix + 1 directly
-		if strings.Index(publicSuffix, ".") == -1 {
+		if minLevel == 1 {
 			return publicSuffixs, fmt.Errorf("level = 1: %s", publicSuffix)
 		}
-		if !ForceQueryThreeLevel(publicSuffix) {
+		if !ForceQueryPSPlusOne(publicSuffix) {
 			// private domains, only query ps. E.g, github.io
-			return []string{publicSuffix}, err
+			publicSuffixs = []string{publicSuffix}
+			for minLevel > 2 {
+				lastIdx := len(publicSuffixs) - 1
+				publicSuffixs = append(publicSuffixs, GetDescentLevel(publicSuffixs[lastIdx]))
+				minLevel--
+			}
+			return publicSuffixs, err
 		}
 		// There are some TLDs that is not managed by ICANN while it should still query ps+1 first
 	}
-	if strings.Index(publicSuffix, ".") != -1 && !StrInArray(publicSuffix, publicSuffixs) {
+	if minLevel > 1 && !StrInArray(publicSuffix, publicSuffixs) {
 		publicSuffixs = append(publicSuffixs, publicSuffix)
+	}
+	for minLevel > 2 {
+		lastIdx := len(publicSuffixs) - 1
+		publicSuffixs = append(publicSuffixs, GetDescentLevel(publicSuffixs[lastIdx]))
+		minLevel--
 	}
 	return publicSuffixs, err
 }

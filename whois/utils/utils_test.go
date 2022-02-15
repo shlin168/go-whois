@@ -38,6 +38,8 @@ func TestGetPublicSuffixs(t *testing.T) {
 		// only query 2-level for non ICANN-managed domain
 		{"abc.github.io", []string{"github.io"}, nil},
 		{"delivery.africa.com", []string{"africa.com"}, nil},
+		// when public suffix contains 3-level, append with 2-level
+		{"abc.ipfs.dweb.link", []string{"ipfs.dweb.link", "dweb.link"}, nil},
 		// testing errors
 		{"github.io", []string{"github.io"}, errors.New(`publicsuffix: cannot derive eTLD+1 for domain "github.io"`)},
 		{"org", emptyResult, errors.New(`publicsuffix: cannot derive eTLD+1 for domain "org"`)},

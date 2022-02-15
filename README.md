@@ -146,9 +146,11 @@ Query from sepecified whois server
 
 ## PublicSuffix for domain
 Input domain is parsed by [`publicsuffix`](https://pkg.go.dev/golang.org/x/net/publicsuffix). Final public suffixs to query WHOIS server are composed by the result of `EffectiveTLDPlusOne(domain)` and `PublicSuffix(domain)`:
-1. append `EffectiveTLDPlusOne(domain)` to query list if error is `nil`
-2. check `PublicSuffix(domain)` result, if it's not ICANN managed domain and not fit *specific `<= 3` rule, remove `EffectiveTLDPlusOne(domain)` and only query `PublicSuffix(domain)`. else append to query list if length of result is more than 1 level, and not duplicate with (1) result
-3. query in order, return **the longest domain** that can be found.
+1. Append `EffectiveTLDPlusOne(domain)` to query list if error is `nil`
+2. Check `PublicSuffix(domain)` result, if it's not ICANN managed domain and not fit *specific `<= 3` rule, remove `EffectiveTLDPlusOne(domain)` and only query `PublicSuffix(domain)`. else append to query list if length of result is more than 1 level, and not duplicate with (1) result
+3. If level of `PublicSuffix(domain)` is larger than 2, append `level=n-1` domain to query list until it reaches `level=2`.
+    * E.g, `PublicSuffix("abc.ipfs.dweb.link") = "ipfs.dweb.link"` which level equals to 3. Append `dweb.link` to query list
+4. Query database in order, return **the longest domain** that can be found.
 
 * specific `<= 3` rule: all length of items in public suffix are no more than 3
     * hit: `co.uk`, `jpn.com`, `net.ua`
@@ -156,16 +158,16 @@ Input domain is parsed by [`publicsuffix`](https://pkg.go.dev/golang.org/x/net/p
 
 > All the domains that query whois contains at least 2 levels.
 
-| Input            | Result of public suffixs   | ICANN | <= 3  | query WHOIS                 | Found           | Result domain   |
-|------------------|----------------------------| ------|-------|-----------------------------| ----------------| ----------------|
-| abc.github.io    | [abc.github.io, github.io] | false | false | [github.io]                 | github.io       | github.io       |
-| pooch.co.uk      | [pooch.co.uk, co.uk]       | true  | true  | [pooch.co.uk, co.uk]        | BOTH            | pooch.co.uk     |
-| frolic.yalta.ua  | [frolic.yalta.ua, yalta.ua]| true  | false | [frolic.yalta.ua, yalta.ua] | BOTH            | frolic.yalta.ua |
-| bruker.co.ua     | [bruker.co.ua, co.ua]      | false | true  | [bruker.co.ua, co.ua]       | BOTH            | bruker.co.ua    |
-| registry.co.com  | [registry.co.com, co.com]  | false | true  | [registry.co.com, co.com]   | co.com          | co.com          |
-| www.google.com   | [google.com]               | true  | false | [google.com]                | google.com      | google.com      |
-| www.GOOGLE.com   | [GOOGLE.com]               | true  | false | [google.com]                | google.com      | google.com      |
-| org              | x                          | true  | true  | x                           | x               | x               |
+| Input              | ps + 1             | ps             | ICANN | <= 3  | ps list to query WHOIS      | Found           | Result domain   |
+|--------------------|--------------------|----------------| ------|-------|-----------------------------| ----------------| ----------------|
+| abc.github.io      | abc.github.io      | github.io      | false | false | [github.io]                 | github.io       | github.io       |
+| frolic.yalta.ua    | frolic.yalta.ua    | yalta.ua       | true  | false | [frolic.yalta.ua, yalta.ua] | BOTH            | frolic.yalta.ua |
+| bruker.co.ua       | bruker.co.ua       | co.ua          | false | true  | [bruker.co.ua, co.ua]       | BOTH            | bruker.co.ua    |
+| registry.co.com    | registry.co.com    | co.com         | false | true  | [registry.co.com, co.com]   | co.com          | co.com          |
+| abc.ipfs.dweb.link | abc.ipfs.dweb.link | ipfs.dweb.link | false | false | [ipfs.dweb.link, dweb.link] | dweb.link       | dweb.link       |
+| www.google.com     | google.com         | com            | true  | false | [google.com]                | google.com      | google.com      |
+| www.GOOGLE.com     | GOGGLE.com         | com            | true  | false | [google.com]                | google.com      | google.com      |
+| org                | x                  | x              | true  | true  | x                           | x               | x               |
 
 > PublicSuffix does not modify the case, we convert the result to lowercase and query for consistency although domain name is not case sensitive. While `query` field in `response` and `access log` keep the case.
 
