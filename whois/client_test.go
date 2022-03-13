@@ -48,26 +48,26 @@ func TestQuery(t *testing.T) {
 		assert.Empty(t, cmp.Diff(exp, w))
 	})
 
-	t.Run("QueryDomainAsync", func(t *testing.T) {
+	t.Run("QueryDomainChan", func(t *testing.T) {
 		testServerMap = DomainWhoisServerMap{"io": []WhoisServer{{Host: whoisServerHost}}}
 		client, err = NewClient(WithTimeout(3*time.Second), WithServerMap(testServerMap))
 		require.Nil(t, err)
 		client.whoisPort = testWhoisPort
-		status := &AsyncStatus{PublicSuffixs: []string{"github.io"}}
-		finishChan := client.QueryPublicSuffixsAsync(status)
+		status := &Status{PublicSuffixs: []string{"github.io"}}
+		finishChan := client.QueryPublicSuffixsChan(status)
 		w := <-finishChan
 		assert.Nil(t, status.Err)
 		assert.Equal(t, RespTypeFound, status.RespType)
 		assert.Empty(t, cmp.Diff(exp, w))
 	})
 
-	t.Run("QueryDomainAsyncSpecificWhoisServer", func(t *testing.T) {
+	t.Run("QueryDomainChanSpecificWhoisServer", func(t *testing.T) {
 		testServerMap = DomainWhoisServerMap{}
 		client, err = NewClient(WithTimeout(3*time.Second), WithServerMap(testServerMap))
 		require.Nil(t, err)
 		client.whoisPort = testWhoisPort
-		status := &AsyncStatus{PublicSuffixs: []string{"github.io"}, WhoisServer: whoisServerHost}
-		finishChan := client.QueryPublicSuffixsAsync(status)
+		status := &Status{PublicSuffixs: []string{"github.io"}, WhoisServer: whoisServerHost}
+		finishChan := client.QueryPublicSuffixsChan(status)
 		w := <-finishChan
 		assert.Nil(t, status.Err)
 		assert.Equal(t, RespTypeFound, status.RespType)
@@ -135,12 +135,12 @@ func TestQueryError(t *testing.T) {
 		assert.ErrorIs(t, err, ErrTimeout)
 	})
 
-	t.Run("QueryWhoisServerConnFailedAsync", func(t *testing.T) {
+	t.Run("QueryWhoisServerConnFailedChan", func(t *testing.T) {
 		serverMap := DomainWhoisServerMap{"aaa": []WhoisServer{{Host: "localhost"}}}
 		client, err := NewClient(WithTimeout(3*time.Second), WithServerMap(serverMap), WithIANA(":12345"))
 		require.Nil(t, err)
-		status := &AsyncStatus{PublicSuffixs: []string{"aaa.aaa"}}
-		finishChan := client.QueryPublicSuffixsAsync(status)
+		status := &Status{PublicSuffixs: []string{"aaa.aaa"}}
+		finishChan := client.QueryPublicSuffixsChan(status)
 		<-finishChan
 		assert.Equal(t, RespTypeError, status.RespType)
 		assert.NotNil(t, status.Err)
@@ -204,7 +204,7 @@ func TestQueryIP(t *testing.T) {
 		assert.Empty(t, cmp.Diff(exp, w))
 	})
 
-	t.Run("QueryIPAsync", func(t *testing.T) {
+	t.Run("QueryIPChan", func(t *testing.T) {
 		client, err := NewClient(
 			WithTimeout(3*time.Second),
 			WithARIN(arinServerAddr),
@@ -213,23 +213,23 @@ func TestQueryIP(t *testing.T) {
 		)
 		require.Nil(t, err)
 		client.arinMap["test"] = whoisServerHost
-		status := &AsyncStatus{DomainOrIP: TestIP}
-		finishChan := client.QueryIPAsync(status)
+		status := &Status{DomainOrIP: TestIP}
+		finishChan := client.QueryIPChan(status)
 		w := <-finishChan
 		assert.Nil(t, status.Err)
 		assert.Equal(t, RespTypeFound, status.RespType)
 		assert.Empty(t, cmp.Diff(exp, w))
 	})
 
-	t.Run("QueryIPAsyncSpecificWhoisServer", func(t *testing.T) {
+	t.Run("QueryIPChanSpecificWhoisServer", func(t *testing.T) {
 		client, err := NewClient(
 			WithTimeout(3*time.Second),
 			WithTestingWhoisPort(testWhoisPort),
 			WithServerMap(testServerMap),
 		)
 		require.Nil(t, err)
-		status := &AsyncStatus{DomainOrIP: TestIP, WhoisServer: whoisServerHost}
-		finishChan := client.QueryIPAsync(status)
+		status := &Status{DomainOrIP: TestIP, WhoisServer: whoisServerHost}
+		finishChan := client.QueryIPChan(status)
 		w := <-finishChan
 		assert.Nil(t, status.Err)
 		assert.Equal(t, RespTypeFound, status.RespType)
@@ -325,15 +325,15 @@ func TestQueryIPError(t *testing.T) {
 		assert.ErrorIs(t, err, ErrTimeout)
 	})
 
-	t.Run("QueryWhoisServerConnFailedAsync", func(t *testing.T) {
+	t.Run("QueryWhoisServerConnFailedChan", func(t *testing.T) {
 		client, err := NewClient(
 			WithTimeout(3*time.Second),
 			WithARIN(wrongArinServerAddr),
 			WithServerMap(testServerMap),
 		)
 		require.Nil(t, err)
-		status := &AsyncStatus{DomainOrIP: TestIP}
-		finishChan := client.QueryIPAsync(status)
+		status := &Status{DomainOrIP: TestIP}
+		finishChan := client.QueryIPChan(status)
 		<-finishChan
 		assert.Equal(t, RespTypeError, status.RespType)
 		assert.NotNil(t, status.Err)

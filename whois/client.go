@@ -67,8 +67,8 @@ type Raw struct {
 	Avail   *bool
 }
 
-// AsyncStatus records response status for async query
-type AsyncStatus struct {
+// Status records response status for query
+type Status struct {
 	DomainOrIP    string
 	PublicSuffixs []string
 	WhoisServer   string
@@ -76,8 +76,8 @@ type AsyncStatus struct {
 	Err           error
 }
 
-func NewAsyncStatus(ws string) *AsyncStatus {
-	return &AsyncStatus{WhoisServer: ws}
+func NewStatus(ws string) *Status {
+	return &Status{WhoisServer: ws}
 }
 
 func NewRaw(rawtext, server string, availPtn ...*regexp.Regexp) *Raw {
@@ -367,8 +367,8 @@ func (c *Client) Parse(ps string, wrt *Raw) (pw *wd.Whois, err error) {
 	return pw, nil
 }
 
-// QueryPublicSuffixsAsync performs async query and returns channel for caller to wait for the result
-func (c *Client) QueryPublicSuffixsAsync(status *AsyncStatus) chan *wd.Whois {
+// QueryPublicSuffixsChan performs query and returns channel for caller to wait for the result
+func (c *Client) QueryPublicSuffixsChan(status *Status) chan *wd.Whois {
 	result := make(chan *wd.Whois)
 	go func() {
 		whoisStruct, err := c.QueryPublicSuffixs(context.Background(), status.PublicSuffixs, status.WhoisServer)
@@ -482,8 +482,8 @@ func (c *Client) QueryIP(ctx context.Context, ip string, whoisServers ...string)
 	return pip, nil
 }
 
-// QueryIPAsync performs async query and returns channel for caller to wait for the result
-func (c *Client) QueryIPAsync(status *AsyncStatus) chan *wip.Whois {
+// QueryIPChan performs query and returns channel for caller to wait for the result
+func (c *Client) QueryIPChan(status *Status) chan *wip.Whois {
 	result := make(chan *wip.Whois)
 	go func() {
 		whoisStruct, err := c.QueryIP(context.Background(), status.DomainOrIP, status.WhoisServer)

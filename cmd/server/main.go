@@ -43,7 +43,6 @@ func main() {
 		"listen":          *listen,
 		"metric":          *metric,
 		"ipLookupTimeout": *ipLookupTimeout,
-		"cacheEnabled":    false,
 		"timeout":         *timeout,
 	}
 	errLogger.WithFields(lf).Info("flag")

@@ -147,10 +147,10 @@ Query from sepecified whois server
 ## PublicSuffix for domain
 Input domain is parsed by [`publicsuffix`](https://pkg.go.dev/golang.org/x/net/publicsuffix). Final public suffixs to query WHOIS server are composed by the result of `EffectiveTLDPlusOne(domain)` and `PublicSuffix(domain)`:
 1. Append `EffectiveTLDPlusOne(domain)` to query list if error is `nil`
-2. Check `PublicSuffix(domain)` result, if it's not ICANN managed domain and not fit *specific `<= 3` rule, remove `EffectiveTLDPlusOne(domain)` and only query `PublicSuffix(domain)`. else append to query list if length of result is more than 1 level, and not duplicate with (1) result
+2. Check `PublicSuffix(domain)` result, if it's not ICANN managed domain and not fit *specific `<= 3` rule, only query `PublicSuffix(domain)`, else query both.
 3. If level of `PublicSuffix(domain)` is larger than 2, append `level=n-1` domain to query list until it reaches `level=2`.
     * E.g, `PublicSuffix("abc.ipfs.dweb.link") = "ipfs.dweb.link"` which level equals to 3. Append `dweb.link` to query list
-4. Query database in order, return **the longest domain** that can be found.
+4. Query whois in order, return **the longest domain** that can be found.
 
 * specific `<= 3` rule: all length of items in public suffix are no more than 3
     * hit: `co.uk`, `jpn.com`, `net.ua`

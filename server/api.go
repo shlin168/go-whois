@@ -17,7 +17,7 @@ import (
 /*
 *    API Handlers:
         (1) Validate input
-        (2) perform async WHOIS query and return the result
+        (2) perform WHOIS query and return the result
         (3) query for IP if query string contains ip=1
         (4) defer: write access log, increase corresponding metrics
 */
@@ -88,7 +88,7 @@ func WhoisHandler(cli *whois.Client, resolver *Resolver, acsLogger logrus.FieldL
 		var qType string
 		var nsErr error
 		respBy := respByNone
-		status := whois.NewAsyncStatus(wr.WhoisServer)
+		status := whois.NewStatus(wr.WhoisServer)
 
 		// write access log, increase metrics before leaving
 		logFields := logrus.Fields{accPath: req.URL.Path, accInput: wr.Query}
@@ -109,8 +109,8 @@ func WhoisHandler(cli *whois.Client, resolver *Resolver, acsLogger logrus.FieldL
 		if utils.IsIP(wr.Query) {
 			qType = whois.TypeIP
 			status.DomainOrIP = wr.Query
-			result := cli.QueryIPAsync(status)
-			asyncResp := <-result
+			respChan := cli.QueryIPChan(status)
+			wBase := <-respChan
 			respBy = respByRT
 			if status.Err != nil {
 				switch status.RespType {
@@ -122,7 +122,7 @@ func WhoisHandler(cli *whois.Client, resolver *Resolver, acsLogger logrus.FieldL
 					return
 				}
 			}
-			wResp := &WhoisIPResp{Whois: asyncResp}
+			wResp := &WhoisIPResp{Whois: wBase}
 			wResp.Type = qType
 			wResp.Notes.OriginalQuery = wr.Query
 			wResp.QueriedDate = utils.UTCNow().Format(wd.WhoisTimeFmt)
@@ -155,8 +155,8 @@ func WhoisHandler(cli *whois.Client, resolver *Resolver, acsLogger logrus.FieldL
 			return
 		}
 		status.PublicSuffixs = pslist
-		result := cli.QueryPublicSuffixsAsync(status)
-		asyncResp := <-result
+		respChan := cli.QueryPublicSuffixsChan(status)
+		wBase := <-respChan
 		respBy = respByRT
 		if status.Err != nil {
 			switch status.RespType {
@@ -168,7 +168,7 @@ func WhoisHandler(cli *whois.Client, resolver *Resolver, acsLogger logrus.FieldL
 				return
 			}
 		}
-		wResp := &WhoisResp{Whois: asyncResp}
+		wResp := &WhoisResp{Whois: wBase}
 		wResp.Type = qType
 		wResp.Notes.OriginalQuery = wr.Query
 		wResp.Notes.PublicSuffixs = pslist
