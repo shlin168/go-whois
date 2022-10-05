@@ -174,6 +174,8 @@ func NewTLDDomainParser(whoisServer string) ITLDParser {
 		return NewEUTLDParser() // eu
 	case "whois.nic.fr":
 		return NewFRTLDParser() // fr
+	case "whois.fi":
+		return NewFITLDParser() // fi
 	case "whois.nic.ir":
 		return NewIRTLDParser() // ir
 	case "whois.nic.it":

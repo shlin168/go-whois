@@ -1,0 +1,39 @@
+
+domain.............: zakony.fi
+status.............: Registered
+created............: 16.9.2015 16:16:22
+expires............: 16.9.2025 16:16:21
+available..........: 16.10.2025 16:16:21
+modified...........: 12.8.2020 13:56:17
+RegistryLock.......: no
+
+Nameservers
+
+nserver............: ns1.euronic.fi [185.55.84.18] [OK]
+nserver............: ns2.euronic.fi [185.55.84.19] [OK]
+nserver............: ns3.euronic.fi [92.243.25.228] [OK]
+
+DNSSEC
+
+dnssec.............: no
+
+Holder
+
+name...............: Kulttuuri-Innovaatioden Kehitys KIK ry
+register number....: 2616135-5
+address............: Sahaajankatu 20 A
+postal.............: 00880
+city...............: Helsinki
+country............: Finland
+phone..............:
+holder email.......:
+
+Registrar
+
+registrar..........: Euronic Oy
+www................: www.domainkeskus.com
+
+>>> Last update of WHOIS database: 5.10.2022 19:01:20 (EET) <<<
+
+
+Copyright (c) Finnish Transport and Communications Agency Traficom
