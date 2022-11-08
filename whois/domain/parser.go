@@ -54,6 +54,7 @@ var defaultKeyMap map[string]string = map[string]string{
 	"last modified":                          "updated_date",
 	"registry expiry date":                   "expired_date",
 	"expires":                                "expired_date",
+	"expire":                                 "expired_date",
 	"expiration date":                        "expired_date",
 	"expiry date":                            "expired_date",
 	"expire date":                            "expired_date",
@@ -149,9 +150,9 @@ type ITLDParser interface {
 
 // NewTLDDomainParser return different parser for different TLD
 // If adding new parser for specific TLDs, new case match should be added to this function
-// Usage:
-//		parser := NewTLDDomainParser(whois_server)
-//		parsedWhois, err := parser.GetParsedWhois(rawtext)
+//
+//	parser := NewTLDDomainParser(whois_server)
+//	parsedWhois, err := parser.GetParsedWhois(rawtext)
 func NewTLDDomainParser(whoisServer string) ITLDParser {
 	switch whoisServer {
 	case "whois.nic.ar":
@@ -387,7 +388,7 @@ func mapContactKeys(cKeyMap map[string]string, key string) string {
 }
 
 // FoundByKey return value of key from rawtext
-// 		FoundByKey("whois server", "whois server: whois.nic.aaa") = whois.nic.aaa
+// E.g., FoundByKey("whois server", "whois server: whois.nic.aaa") = whois.nic.aaa
 func FoundByKey(key, rawtext string) string {
 	keyPlusColon := key + ":"
 	if startIdx := strings.Index(rawtext, keyPlusColon); startIdx != -1 {

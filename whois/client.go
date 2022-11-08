@@ -35,8 +35,8 @@ const (
 )
 
 var (
-	DefaultReadTimeout  = 1 * time.Second
-	DefaultWriteTimeout = 1 * time.Second
+	DefaultReadTimeout  = 5 * time.Second
+	DefaultWriteTimeout = 5 * time.Second
 	DefaultTimeout      = 5 * time.Second
 
 	DefaultIPWhoisServerMap = map[string]string{
@@ -111,6 +111,8 @@ func WithTimeout(timeout time.Duration) ClientOpts {
 			return fmt.Errorf("invalid timeout: %v", timeout)
 		}
 		c.timeout = timeout
+		c.rtimeout = timeout
+		c.wtimeout = timeout
 		return nil
 	}
 }
