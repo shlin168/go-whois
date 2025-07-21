@@ -3,15 +3,15 @@
 [![Actions Status](https://github.com/shlin168/go-whois/actions/workflows/go.yml/badge.svg)](https://github.com/shlin168/go-whois/actions/workflows/go.yml)
 [![codecov](https://codecov.io/gh/shlin168/go-whois/branch/master/graph/badge.svg)](https://codecov.io/gh/shlin168/go-whois)
 
-Provide WHOIS [library](#Library), [command line tool](#Command-Line-Tool) and [server with restful APIs](#Server) to query whois information for domains and IPs.
+Provides a WHOIS [library](#Library), [command line tool](#Command-Line-Tool), and [server with RESTful APIs](#Server) to query WHOIS information for domains and IP addresses.
 
-It's also available to specify whois server to query if known.
+You can also specify a WHOIS server to query if known.
 
-> :warning: There're diverse WHOIS formats for domains (especially `cctld`). It's hard to precisely parse all the information from rawtext. It is suggested that either adding `Parser` in [domain](whois/domain) or parse again with self-defined method after getting general WHOIS response.
+> :warning: **Note**: There are diverse WHOIS formats for domains (especially country code top-level domains). It's difficult to precisely parse all information from raw text. We recommend either adding a `Parser` in [domain](whois/domain) or parsing again with a custom method after getting the general WHOIS response.
 
 ## Library
-### Install
-```
+### Installation
+```bash
 go get github.com/shlin168/go-whois
 ```
 ### Example
@@ -28,37 +28,37 @@ import (
 
 func main() {
     ctx := context.Background()
-    // client default timeout: 5s,
-    // client with custom timeout: whois.NewClient(whois.WithTimeout(10*time.Second))
+    // Client default timeout: 5s
+    // Client with custom timeout: whois.NewClient(whois.WithTimeout(10*time.Second))
     client, err := whois.NewClient()
     if err != nil {
         fmt.Println(err)
         os.Exit(1)
     }
 
-    // query domain
+    // Query domain
     qDomain := "www.google.com"
     whoisDomain, err := client.Query(ctx, qDomain)
     if err == nil {
-        fmt.Println("rawtext:", whoisDomain.RawText)
-        fmt.Println("from whois server:", whoisDomain.WhoisServer)
-        fmt.Printf("parsed whois: %+v\n", whoisDomain.ParsedWhois)
+        fmt.Println("Raw text:", whoisDomain.RawText)
+        fmt.Println("From WHOIS server:", whoisDomain.WhoisServer)
+        fmt.Printf("Parsed WHOIS: %+v\n", whoisDomain.ParsedWhois)
         if whoisDomain.IsAvailable != nil {
-          fmt.Println("available:", *whoisDomain.IsAvailable)
+          fmt.Println("Available:", *whoisDomain.IsAvailable)
         }
     }
 
-    // query IP
+    // Query IP
     qIP := "1.1.1.1"
     whoisIP, err := client.QueryIP(ctx, qIP)
     if err == nil {
-        fmt.Println("rawtext:", whoisIP.RawText)
-        fmt.Println("from whois server:", whoisIP.WhoisServer)
-        fmt.Printf("parsed whois: %+v\n", whoisIP.ParsedWhois)
+        fmt.Println("Raw text:", whoisIP.RawText)
+        fmt.Println("From WHOIS server:", whoisIP.WhoisServer)
+        fmt.Printf("Parsed WHOIS: %+v\n", whoisIP.ParsedWhois)
     }
 }
 ```
-Note: `NewClient` fetch and parse [whois-server-xml](http://whois-server-list.github.io/whois-server-list/3.0/whois-server-list.xml) when invoked. To avoid fetching file every time when initializing client, changed to use method below:
+**Note**: `NewClient` fetches and parses [whois-server-xml](http://whois-server-list.github.io/whois-server-list/3.0/whois-server-list.xml) when invoked. To avoid fetching the file every time when initializing the client, use the method below:
 ```go
 serverMap, err := whois.NewDomainWhoisServerMap(whois.WhoisServerListURL)
 if err != nil {
@@ -73,18 +73,18 @@ client := whois.NewClient(whois.WithServerMap(serverMap))
 go build -o $PWD/bin ./cmd/whois
 ```
 ### Usage
-To query whois domain/ip
+To query WHOIS information for domains or IP addresses:
 ```bash
 ./bin/whois -q google.com
 ```
 ```bash
 ./bin/whois -q 1.1.1.1
 ```
-Query from sepecified whois server
+Query from a specified WHOIS server:
 ```bash
 ./bin/whois -q aaa.aaa -server whois.nic.aaa
 ```
-Query with timeout (default: `5s`)
+Query with custom timeout (default: `5s`):
 ```bash
 ./bin/whois -q google.com -timeout 10s
 ```
@@ -95,16 +95,16 @@ Query with timeout (default: `5s`)
 go build -o $PWD/bin ./cmd/server
 ```
 ### Usage
-Start server, default listen on `:8080` port, and prometheus metrics show in `:6060`
+Start the server (default: listens on port `:8080` and serves Prometheus metrics on `:6060`):
 ```bash
 ./bin/server
 ```
-Run `./bin/server -h` to check other arguments
+Run `./bin/server -h` to see all available arguments.
 
 ### API
 `POST /whois`
 
-Query with domain/ip
+Query with domain or IP address:
 ```
 {
   "query": "www.google.com"
@@ -115,14 +115,14 @@ Query with domain/ip
   "query": "1.1.1.1"
 }
 ```
-Query with domain and also query ip from resolver
+Query domain and also resolve its IP address:
 ```
 {
   "query": "www.google.com",
   "ip": true
 }
 ```
-Query from sepecified whois server
+Query from a specified WHOIS server:
 ```
 {
   "query": "aaa.aaa",
@@ -136,27 +136,30 @@ Query from sepecified whois server
 }
 ```
 
-#### HTTP Response Code
-  * `200`: found
-  * `404`: not found, which means response rawtext contains keywords that are regard as WHOIS not found
-      * Method: Try to fetch keywords([domain](./whois/domain/parser.go#L127)/[ip](./whois/ip/parser.go#L77)) in rawtext
-  * `400`: invalid input, wrong request format or error when getting public suffixs for domain
-  * `408`: whois server not response after `N`(timeout, default `5s`) seconds
-  * `500`: internal error
+#### HTTP Response Codes
+  * `200`: Found - WHOIS information successfully retrieved
+  * `404`: Not found - response raw text contains keywords indicating WHOIS record not found
+      * Method: Searches for keywords ([domain](./whois/domain/parser.go#L127)/[IP](./whois/ip/parser.go#L77)) in raw text
+  * `400`: Bad request - invalid input, wrong request format, or error when getting public suffixes for domain
+  * `408`: Request timeout - WHOIS server did not respond within the timeout period (default: `5s`)
+  * `500`: Internal server error
 
-## PublicSuffix for domain
-Input domain is parsed by [`publicsuffix`](https://pkg.go.dev/golang.org/x/net/publicsuffix). Final public suffixs to query WHOIS server are composed by the result of `EffectiveTLDPlusOne(domain)` and `PublicSuffix(domain)`:
-1. Append `EffectiveTLDPlusOne(domain)` to query list if error is `nil`
-2. Check `PublicSuffix(domain)` result, if it's not ICANN managed domain and not fit *specific `<= 3` rule, only query `PublicSuffix(domain)`, else query both.
-3. If level of `PublicSuffix(domain)` is larger than 2, append `level=n-1` domain to query list until it reaches `level=2`.
-    * E.g, `PublicSuffix("abc.ipfs.dweb.link") = "ipfs.dweb.link"` which level equals to 3. Append `dweb.link` to query list
-4. Query whois in order, return **the longest domain** that can be found.
+## Public Suffix Handling for Domains
+Input domains are parsed using [`publicsuffix`](https://pkg.go.dev/golang.org/x/net/publicsuffix). The final public suffixes to query WHOIS servers are composed of the results from `EffectiveTLDPlusOne(domain)` and `PublicSuffix(domain)`:
 
-* specific `<= 3` rule: all length of items in public suffix are no more than 3
-    * hit: `co.uk`, `jpn.com`, `net.ua`
-    * not hit: `github.io`, `zhitomir.ua`
+1. Append `EffectiveTLDPlusOne(domain)` to the query list if the error is `nil`
+2. Check the `PublicSuffix(domain)` result:
+   - If it's not an ICANN-managed domain and doesn't fit the *specific `<= 3` rule*, only query `PublicSuffix(domain)`
+   - Otherwise, query both
+3. If the level of `PublicSuffix(domain)` is larger than 2, append `level=n-1` domain to the query list until it reaches `level=2`
+   - Example: `PublicSuffix("abc.ipfs.dweb.link") = "ipfs.dweb.link"` which has level 3. Append `dweb.link` to query list
+4. Query WHOIS servers in order and return **the longest domain** that can be found
 
-> All the domains that query whois contains at least 2 levels.
+**Specific `<= 3` rule**: All components in the public suffix have a length of 3 characters or fewer
+- **Matches**: `co.uk`, `jpn.com`, `net.ua`
+- **Does not match**: `github.io`, `zhitomir.ua`
+
+> **Note**: All domains queried for WHOIS contain at least 2 levels.
 
 | Input              | ps + 1             | ps             | ICANN | <= 3  | ps list to query WHOIS      | Found           | Result domain   |
 |--------------------|--------------------|----------------| ------|-------|-----------------------------| ----------------| ----------------|
@@ -169,35 +172,35 @@ Input domain is parsed by [`publicsuffix`](https://pkg.go.dev/golang.org/x/net/p
 | www.GOOGLE.com     | GOGGLE.com         | com            | true  | false | [google.com]                | google.com      | google.com      |
 | org                | x                  | x              | true  | true  | x                           | x               | x               |
 
-> PublicSuffix does not modify the case, we convert the result to lowercase and query for consistency although domain name is not case sensitive. While `query` field in `response` and `access log` keep the case.
+> **Note**: PublicSuffix does not modify the case. We convert the result to lowercase and query for consistency, although domain names are not case-sensitive. The `query` field in `response` and `access log` preserves the original case.
 
 ## Prometheus Metrics
-### HTTP requests
-* `whois_http_request_total{code=...}` (counter) The amount of requests per HTTP status code
-* `whois_http_request_in_flight` (gauge) A gauge of requests currently being served by the wrapped handler
-* `whois_http_request_duration_seconds` (histogram) A histogram of latencies for requests
+### HTTP Requests
+* `whois_http_request_total{code=...}` (counter) - The number of requests per HTTP status code
+* `whois_http_request_in_flight` (gauge) - Number of requests currently being served by the wrapped handler
+* `whois_http_request_duration_seconds` (histogram) - Histogram of request latencies
 
-### Service
-#### Counter
-* `whois_response_total{resp_by=...,resp_type=...,type=...}` (counter) The amount of response from per input_type, per components and per result type for queries
-  * `resp_by` includes
+### Service Metrics
+#### Counters
+* `whois_response_total{resp_by=...,resp_type=...,type=...}` (counter) - Number of responses by input type, component, and result type for queries
+  * `resp_by` values:
     * `public_suffix`
     * `realtime`
     * `none`
-  * `resp_type` includes
+  * `resp_type` values:
     * `found`
     * `not_found`
     * `error`
     * `timeout`
-  * `type` includes
+  * `type` values:
     * `domain`
     * `ip`
-* `whois_nslookup_total{status=...}` (counter) The amount of return status when doing ip lookup for domains
-  * `status` includes
+* `whois_nslookup_total{status=...}` (counter) - Number of responses by status when performing IP lookup for domains
+  * `status` values:
     * `found`
     * `not_found`
     * `error`
 
-## How to know which whois server to query for input
-* For domains, whois server is fetched from [whois-server-xml](http://whois-server-list.github.io/whois-server-list/3.0/whois-server-list.xml)
-* For IPs, query `whois.arin.net` and get the next whois server to query
+## WHOIS Server Discovery
+* **For domains**: WHOIS server information is fetched from [whois-server-xml](http://whois-server-list.github.io/whois-server-list/3.0/whois-server-list.xml)
+* **For IP addresses**: Query `whois.arin.net` first to get the appropriate WHOIS server for the specific IP range
