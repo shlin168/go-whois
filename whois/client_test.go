@@ -3,12 +3,14 @@ package whois
 import (
 	"context"
 	"net"
+	"regexp"
 	"strconv"
 	"strings"
 	"testing"
 	"time"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -71,6 +73,16 @@ func TestQuery(t *testing.T) {
 		w := <-finishChan
 		assert.Nil(t, status.Err)
 		assert.Equal(t, RespTypeFound, status.RespType)
+		assert.Empty(t, cmp.Diff(exp, w))
+	})
+
+	t.Run("QueryPublicSuffixSingle", func(t *testing.T) {
+		testServerMap = DomainWhoisServerMap{"io": []WhoisServer{{Host: whoisServerHost}}}
+		client, err = NewClient(WithTimeout(3*time.Second), WithServerMap(testServerMap))
+		require.Nil(t, err)
+		client.whoisPort = testWhoisPort
+		w, err := client.QueryPublicSuffix(context.Background(), TestDomain)
+		assert.Nil(t, err)
 		assert.Empty(t, cmp.Diff(exp, w))
 	})
 
@@ -146,6 +158,44 @@ func TestQueryError(t *testing.T) {
 		assert.NotNil(t, status.Err)
 		assert.Contains(t, status.Err.Error(), "connection refused")
 	})
+}
+
+func TestNewStatus(t *testing.T) {
+	s := NewStatus(DefaultIANA)
+	assert.Equal(t, DefaultIANA, s.WhoisServer)
+	assert.Empty(t, s.PublicSuffixs)
+	assert.Empty(t, s.RespType)
+	assert.Nil(t, s.Err)
+}
+
+func TestNewRawWithAvailPattern(t *testing.T) {
+	availPtn := regexp.MustCompile("no match")
+
+	notFound := NewRaw("no match found", "whois.example.com", availPtn)
+	require.NotNil(t, notFound.Avail)
+	assert.True(t, *notFound.Avail)
+
+	found := NewRaw("domain found", "whois.example.com", availPtn)
+	require.NotNil(t, found.Avail)
+	assert.False(t, *found.Avail)
+}
+
+func TestWithErrLogger(t *testing.T) {
+	logger := logrus.New()
+	c, err := newClient(WithErrLogger(logger))
+	require.Nil(t, err)
+	assert.Equal(t, logger, c.logger)
+}
+
+func TestNewClientOptsErr(t *testing.T) {
+	_, err := NewClient(WithTimeout(0))
+	assert.NotNil(t, err)
+}
+
+func TestNewClientDefaultServerMap(t *testing.T) {
+	client, err := NewClient(WithTimeout(3 * time.Second))
+	require.Nil(t, err)
+	assert.NotEmpty(t, client.whoisMap)
 }
 
 func TestQueryIP(t *testing.T) {
